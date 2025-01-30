@@ -1,4 +1,4 @@
-Vraj Belani
-Chengze Liu
-Jinting Zhu
+Vraj Belani \
+Chengze Liu \
+Jinting Zhu \
 Daniel Garza

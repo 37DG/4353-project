@@ -1,1 +1,4 @@
-Insert team member names here, one per line.
+Vraj Belani
+Chengze Liu
+Jinting Zhu
+Daniel Garza

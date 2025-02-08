@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Microsoft</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .login-button {
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background-color: #0078D4;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <button class="login-button" onclick="redirectToMicrosoftLogin()">Login with Microsoft</button>
+
+    <script>
+        function redirectToMicrosoftLogin() {
+            window.location.href = "http://localhost:8000/auth/login/azuread-oauth2/";
+        }
+    </script>
+</body>
+</html>

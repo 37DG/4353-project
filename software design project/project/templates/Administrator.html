@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrator Dashboard</title>
+    <title>Administrator</title>
     <style>
         body {
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             text-align: center;
+            color: white;
         }
         .container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(25, 25, 25, 0.9);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             max-width: 800px;
             margin: auto;
         }
@@ -24,14 +25,16 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background: #1c1c1c;
+            color: white;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #444;
             padding: 10px;
             text-align: left;
         }
         th {
-            background-color: #f4b6c2;
+            background-color: #333;
         }
         .pagination {
             margin-top: 20px;
@@ -40,14 +43,68 @@
             padding: 10px;
             margin: 5px;
             border: none;
-            background: #ff758c;
+            background: #555;
             color: white;
             cursor: pointer;
             border-radius: 5px;
         }
         .pagination button:disabled {
-            background: #ccc;
+            background: #777;
             cursor: not-allowed;
+        }
+        .action-buttons {
+            margin-top: 20px;
+        }
+        .action-buttons button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background: #444;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        .modal-content input, .modal-content select {
+            width: 90%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #666;
+            border-radius: 5px;
+            text-align: center;
+            background: #333;
+            color: white;
+        }
+        .modal-content button {
+            margin-top: 10px;
+            padding: 10px;
+            background: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 95%;
         }
     </style>
 </head>
@@ -55,7 +112,7 @@
     <div class="container">
         <h1>Welcome back, {{ name }}</h1>
         <p>Role level is: Administrator</p>
-        
+
         <table>
             <thead>
                 <tr>
@@ -76,7 +133,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
         <div class="pagination">
             {% if users.has_previous %}
                 <button onclick="window.location.href='?page={{ users.previous_page_number }}'">Previous</button>
@@ -86,6 +143,145 @@
                 <button onclick="window.location.href='?page={{ users.next_page_number }}'">Next</button>
             {% endif %}
         </div>
+
+        <div class="action-buttons">
+            <button onclick="openModal('createModal')">Create User</button>
+            <button onclick="openModal('updateModal')">Update User</button>
+            <button onclick="openModal('deleteModal')">Delete User</button>
+        </div>
     </div>
+
+    <!-- Create User Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <h3>Create User</h3>
+            <input type="text" id="createName" placeholder="Name">
+            <input type="email" id="createEmail" placeholder="Email">
+            <select id="createRole">
+                <option value="" disabled selected>-- Select Role --</option>
+                <option value="Administrator">Administrator</option>
+                <option value="Basicuser">Basicuser</option>
+            </select>
+            <select id="createStatus">
+                <option value="" disabled selected>-- Select Status --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <button onclick="createUser()">Submit</button>
+            <button onclick="closeModal('createModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update User</h3>
+            <input type="email" id="updateEmail" placeholder="Enter User Email">
+            <input type="text" id="updateName" placeholder="New Name (Optional)">
+            <select id="updateRole">
+                <option value="" disabled selected>-- Select Role (Optional) --</option>
+                <option value="Administrator">Administrator</option>
+                <option value="Basicuser">Basicuser</option>
+            </select>
+            <select id="updateStatus">
+                <option value="" disabled selected>-- Select Status (Optional) --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <button onclick="updateUser()">Submit</button>
+            <button onclick="closeModal('updateModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete User</h3>
+            <input type="text" id="deleteName" placeholder="Name">
+            <input type="email" id="deleteEmail" placeholder="Email">
+            <button onclick="deleteUser()">Delete</button>
+            <button onclick="closeModal('deleteModal')">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Open Modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+
+            // Clear inputs when modal is closed
+            const inputs = document.querySelectorAll(`#${modalId} input, #${modalId} select`);
+            inputs.forEach(input => input.value = "");
+        }
+
+        // Create User
+        function createUser() {
+            const name = document.getElementById('createName').value;
+            const email = document.getElementById('createEmail').value;
+            const role = document.getElementById('createRole').value;
+            const status = document.getElementById('createStatus').value;
+
+            fetch('/create-user/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, role, status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                closeModal('createModal');
+                location.reload();
+            });
+        }
+
+        // Update User
+        function updateUser() {
+            const email = document.getElementById('updateEmail').value;
+            const name = document.getElementById('updateName').value;
+            const role = document.getElementById('updateRole').value;
+            const status = document.getElementById('updateStatus').value;
+
+            fetch('/update-user/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, name, role, status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                closeModal('updateModal');
+                location.reload();
+            });
+        }
+
+        // Delete User
+        function deleteUser() {
+            const name = document.getElementById('deleteName').value;
+            const email = document.getElementById('deleteEmail').value;
+
+            fetch('/delete-user/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                closeModal('deleteModal');
+                location.reload();
+            });
+        }
+    </script>
 </body>
 </html>

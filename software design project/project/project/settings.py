@@ -156,7 +156,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = '87c9d60f-c50b-42b2-bcef-bc7a0eb0c4e8'  # From Azure App
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = 'nfe8Q~F6G9EYqLEM3~gq_zkcMtmN-67zq4PUocTy'  # (If applicable)
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = # SECRET  # (If applicable)
 SOCIAL_AUTH_AZUREAD_OAUTH2_TENANT_ID = '170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259'  # Use 'common' for multi-tenant or replace with your tenant ID
 SOCIAL_AUTH_AZUREAD_OAUTH2_RESOURCE = 'https://graph.microsoft.com/'
 

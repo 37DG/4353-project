@@ -128,39 +128,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###############################################################################################################
-INSTALLED_APPS += [
-    'social_django',
-]
+MICROSOFT_AUTH = {
+    "CLIENT_ID": "87c9d60f-c50b-42b2-bcef-bc7a0eb0c4e8",
+    "TENANT_ID": "170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259",
+    "CLIENT_SECRET": "secret",
+    "AUTHORITY": f"https://login.microsoftonline.com/170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259",
+    "REDIRECT_URI": "http://localhost:8000/auth/callback/",
+}
 
-MIDDLEWARE += [
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-]
 
-SOCIAL_AUTH_AZUREAD_OAUTH2_EXTRA_DATA = ['email']
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
-
-# Microsoft Entra ID (Office 365) OAuth Config
-SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
-    'social_core.backends.azuread.AzureADOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = '87c9d60f-c50b-42b2-bcef-bc7a0eb0c4e8'  # From Azure App
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = # SECRET  # (If applicable)
-SOCIAL_AUTH_AZUREAD_OAUTH2_TENANT_ID = '170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259'  # Use 'common' for multi-tenant or replace with your tenant ID
-SOCIAL_AUTH_AZUREAD_OAUTH2_RESOURCE = 'https://graph.microsoft.com/'
-
-# Login and Redirect Settings
-LOGIN_URL = '/dashboard/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'

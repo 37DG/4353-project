@@ -6,12 +6,9 @@ app_name = 'UserManagement'
 urlpatterns = [
     # index URL
     path('', views.index, name='index'),
-
-    # dashboard URL
-    path('dashboard/', views.dashboard, name='dashboard'),
-
-    # fetch user when user try to login from dashboard
-    path("check-user/", views.check_user, name="check_user"),
+    
+    path('auth/login/', views.microsoft_login, name='microsoft_login'),  # Redirect to Microsoft
+    path('auth/callback/', views.login_view, name='auth_callback'),
 
     # Administrator URL
     path('Administrator/', views.Administrator, name='Administrator'),

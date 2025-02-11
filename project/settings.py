@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-v!)yxk0!gqs_5y258=p)&h(p9d*da&8&rnp$9htq5chv@a+g3v'
+SECRET_KEY = config('SECRET_KEY', default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
 
 
 # Application definition
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'UserManagement.apps.UsermanagementConfig'
 ]
 
 MIDDLEWARE = [
@@ -77,11 +79,11 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project',
+        'NAME': 'users',
         'USER':'root',
-        'PASSWORD':'5847',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
+        'PASSWORD':config('DB_PASSWORD', default=''),
+        'HOST':config('DB_HOST', default='127.0.0.1'),
+        'PORT':config('DB_PORT', default='3306'),
     }
 }
 
@@ -110,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 
@@ -156,7 +158,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = '87c9d60f-c50b-42b2-bcef-bc7a0eb0c4e8'  # From Azure App
-SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = # SECRET  # (If applicable)
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = config('AZURE_SECRET', default='')  # (If applicable)
 SOCIAL_AUTH_AZUREAD_OAUTH2_TENANT_ID = '170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259'  # Use 'common' for multi-tenant or replace with your tenant ID
 SOCIAL_AUTH_AZUREAD_OAUTH2_RESOURCE = 'https://graph.microsoft.com/'
 

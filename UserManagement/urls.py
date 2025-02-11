@@ -23,4 +23,6 @@ urlpatterns = [
     path('create-user/', views.create_user, name='create_user'),
     path('update-user/', views.update_user, name='update_user'),
     path('delete-user/', views.delete_user, name='delete_user'),
+
+    path('Deactivated/', views.deactivated_user, name='deactivated_user')
 ]

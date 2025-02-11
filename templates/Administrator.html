@@ -113,6 +113,8 @@
         <h1>Welcome back, {{ name }}</h1>
         <p>Role level is: Administrator</p>
 
+        <p id="notification-text"></p>
+
         <table>
             <thead>
                 <tr>
@@ -128,7 +130,11 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.role }}</td>
-                    <td>{{ user.status }}</td>
+                {% if user.status %}
+                    <td>Active</td>
+                {% else %}
+                    <td>Locked</td>
+                {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -164,8 +170,8 @@
             </select>
             <select id="createStatus">
                 <option value="" disabled selected>-- Select Status --</option>
-                <option value="1">1</option>
-                <option value="0">0</option>
+                <option value="1">Active</option>
+                <option value="0">Locked</option>
             </select>
             <button onclick="createUser()">Submit</button>
             <button onclick="closeModal('createModal')">Cancel</button>
@@ -185,8 +191,8 @@
             </select>
             <select id="updateStatus">
                 <option value="" disabled selected>-- Select Status (Optional) --</option>
-                <option value="1">1</option>
-                <option value="0">0</option>
+                <option value="1">Active</option>
+                <option value="0">Locked</option>
             </select>
             <button onclick="updateUser()">Submit</button>
             <button onclick="closeModal('updateModal')">Cancel</button>
@@ -226,6 +232,8 @@
             const role = document.getElementById('createRole').value;
             const status = document.getElementById('createStatus').value;
 
+            const notification = document.getElementById('notification-text');
+
             fetch('/create-user/', {
                 method: 'POST',
                 headers: {
@@ -237,6 +245,7 @@
             .then(data => {
                 alert(data.message);
                 closeModal('createModal');
+                URLSearchParams.
                 location.reload();
             });
         }

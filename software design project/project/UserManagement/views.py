@@ -1,54 +1,112 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from datetime import datetime
-from django.db import connection
-
-import json
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import get_user_model
+from django.db import connection
+import json
+import msal
+import requests
 from django.core.paginator import Paginator
-User = get_user_model()
+from django.conf import settings
 
 # The beginning page
 def index(request):
     return render(request, 'index.html')
 
-# After login, redirect to the dashboard page
-def dashboard(request):
-    return render(request, 'dashboard.html')
+def microsoft_login(request):
+    """Redirects the user to Microsoft OAuth login page."""
+    auth_url = (
+        f"https://login.microsoftonline.com/{settings.MICROSOFT_AUTH['TENANT_ID']}/oauth2/v2.0/authorize"
+        f"?client_id={settings.MICROSOFT_AUTH['CLIENT_ID']}"
+        f"&response_type=code"
+        f"&redirect_uri={settings.MICROSOFT_AUTH['REDIRECT_URI']}"
+        f"&response_mode=query"
+        f"&scope=User.Read"
+        f"&state=12345"
+    )
+    return redirect(auth_url)
 
-# Check user feature in the Dashboard page
-@csrf_exempt
-def check_user(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        name = data.get("username")
-        email = data.get("email")
+def login_view(request):
+    """Handle Microsoft OAuth callback, create user if needed, and redirect based on role."""
+    if "code" in request.GET:
+        auth_code = request.GET["code"]
 
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT role, status FROM user WHERE name=%s AND email=%s", [name, email])
-            result = cursor.fetchone()  # Get the result
+        msal_app = msal.ConfidentialClientApplication(
+            settings.MICROSOFT_AUTH["CLIENT_ID"],
+            client_credential=settings.MICROSOFT_AUTH["CLIENT_SECRET"],
+            authority=settings.MICROSOFT_AUTH["AUTHORITY"],
+        )
 
+        token_response = msal_app.acquire_token_by_authorization_code(
+            auth_code,
+            scopes=["User.Read"],
+            redirect_uri=settings.MICROSOFT_AUTH["REDIRECT_URI"],
+        )
 
-        if result:
-            role, status = result  # Extract role and status
-            # selfCheck
-            print(f"DEBUG: Found user with role={role}, status={status}")
-
-            if status == '0':
-                return JsonResponse({"message": "You are deactivated"})
+        if "access_token" in token_response:
+            access_token = token_response["access_token"]
+            headers = {"Authorization": f"Bearer {access_token}"}
             
-            request.session["name"] = name  # Store username in session
+            # Fetch user information from Microsoft Graph API
+            user_info = requests.get("https://graph.microsoft.com/v1.0/me", headers=headers).json()
 
+            raw_name = user_info.get("displayName", "Unknown User")  # Ex: "Doe, John"
+            user_email = user_info.get("mail", "No email available")
+            user_id = user_info.get("id", "No ID available")
+
+            # Fix name formatting from "Lastname, Firstname" to "Firstname Lastname"
+            if "," in raw_name:
+                last_name, first_name = raw_name.split(", ")
+                user_name = f"{first_name} {last_name}"
+            else:
+                user_name = raw_name  # If format is already correct, keep it
+
+            #request.session["name"] = user_name
+            print(f"User logged in: {user_name} ({user_email}), ID: {user_id}")
+
+            # Default role and status
+            role = "Basicuser"
+            status = 1  # 1 = Active, 0 = Inactive
+
+            with connection.cursor() as cursor:
+                # Check if the user already exists
+                cursor.execute("SELECT role, status FROM user WHERE email=%s", [user_email])
+                existing_user = cursor.fetchone()
+
+                if existing_user:
+                    role, status = existing_user  # Retrieve existing role and status
+                else:
+                    # If no users exist in the system, make the first user an Administrator
+                    cursor.execute("SELECT COUNT(*) FROM user")
+                    user_count = cursor.fetchone()[0]
+
+                    if user_count == 0:
+                        role = "Administrator"
+
+                    # Insert new user into the database
+                    cursor.execute(
+                        "INSERT INTO user (name, email, role, status) VALUES (%s, %s, %s, %s)",
+                        [user_name, user_email, role, status]
+                    )
+                    print("New user created in the database.")
+
+            # Store user info in session
+            request.session["user_email"] = user_email
+            request.session["user_name"] = user_name
+            request.session["user_id"] = user_id
+            request.session["role"] = role
+
+            # Redirect user based on role
             if role == "Administrator":
-                return JsonResponse({"redirect": "/Administrator"})
+                return redirect("/Administrator/?name=%s"%user_name)
+            else:
+                return redirect("/Basicuser/?name=%s"%user_name)
 
-            if role == "Basicuser":
-                return JsonResponse({"redirect": "/Basicuser"})
+        # If token response fails, log the error
+        print("DEBUG: Microsoft OAuth token response failed", token_response)
+        return JsonResponse({"status": "error", "message": "Failed to retrieve access token"}, status=401)
 
-        # If no matching user is found
-        return JsonResponse({"message": "You are not our user"})
+    return JsonResponse({"status": "error", "message": "Authentication failed"}, status=401)
+
     
 # Administrator view
 def Administrator(request):
@@ -58,30 +116,26 @@ def Administrator(request):
         users_data = cursor.fetchall()
 
     # Convert raw data into a dictionary
-    users = [
-        {"name": row[0], "email": row[1], "role": row[2], "status": row[3]}
-        for index, row in enumerate(users_data)
-    ]
+    users = [{"name": row[0], "email": row[1], "role": row[2], "status": row[3]} for row in users_data]
 
     # Paginate the data (5 records per page)
-    paginator = Paginator(users, 2)
+    paginator = Paginator(users, 5)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
     # Retrieve username from session for personalized greeting
-    name = request.session.get("name", "Admin")
+    name = request.GET.get("name", "Admin")
 
     # Pass paginated users and username to the template
     return render(request, "Administrator.html", {"users": page_obj, "name": name})
 
 # Basicuser view
 def Basicuser(request):
-    name = request.session.get("name", "User")  # Default to 'User' if not found
+    name = request.GET.get("name", "User")  # Default to 'User' if not found
     return render(request, 'Basicuser.html', {"name": name})
     #return render(request, 'Basicuser.html')
 
 # Create user feature from Administrator page
-@csrf_exempt
 def create_user(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -108,7 +162,6 @@ def create_user(request):
         return JsonResponse({"message": "User created successfully!"})
 
 # Update user feature from Administrator page            
-@csrf_exempt
 def update_user(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -156,7 +209,6 @@ def update_user(request):
         return JsonResponse({"message": "User updated successfully!"})
 
 # Delete user feature from Administrator page    
-@csrf_exempt
 def delete_user(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -183,3 +235,5 @@ def delete_user(request):
             # Delete the user
             cursor.execute("DELETE FROM user WHERE name=%s AND email=%s", [name, email])
         return JsonResponse({"message": "User deleted successfully!"})
+
+

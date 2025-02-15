@@ -6,6 +6,7 @@ import json
 import msal
 import requests
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
 # The beginning page
@@ -136,6 +137,7 @@ def Basicuser(request):
     #return render(request, 'Basicuser.html')
 
 # Create user feature from Administrator page
+@csrf_exempt
 def create_user(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -162,6 +164,7 @@ def create_user(request):
         return JsonResponse({"message": "User created successfully!"})
 
 # Update user feature from Administrator page            
+@csrf_exempt
 def update_user(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -209,6 +212,7 @@ def update_user(request):
         return JsonResponse({"message": "User updated successfully!"})
 
 # Delete user feature from Administrator page    
+@csrf_exempt
 def delete_user(request):
     if request.method == "POST":
         data = json.loads(request.body)

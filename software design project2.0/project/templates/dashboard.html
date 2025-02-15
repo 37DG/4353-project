@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: transparent;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        .background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .floating-text {
+            position: absolute;
+            top: 50%;
+            left: -100px;
+            font-size: 36px;
+            color: black;
+            opacity: 0.5;
+            white-space: nowrap;
+            animation: flowText 10s linear infinite;
+        }
+        @keyframes flowText {
+            from {
+                left: -100px;
+            }
+            to {
+                left: 100%;
+            }
+        }
+        .login-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input {
+            display: block;
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        button {
+            width: 85%;
+            padding: 15px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="Email" id="email" placeholder="Email">
+        <button onclick="checkUser()">GO</button>
+        <p id="response-message"></p> <!-- This will show the response -->
+    </div>
+    <script>
+        const words = ["Hello", "Hola", "Bonjour", "Hallo", "Ciao", "こんにちは", "안녕하세요", "你好", "Привет", "مرحبا"];
+        function createFloatingText() {
+            const text = document.createElement("div");
+            text.className = "floating-text";
+            text.textContent = words[Math.floor(Math.random() * words.length)];
+            text.style.top = Math.random() * 90 + "%";
+            text.style.animationDuration = (Math.random() * 5 + 5) + "s";
+            document.getElementById("background").appendChild(text);
+            setTimeout(() => text.remove(), 10000);
+        }
+        setInterval(createFloatingText, 1000);
+
+
+        function checkUser() {
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const messageElement = document.getElementById("response-message");
+
+            fetch("/check-user/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify({ username: username, email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else if (data.message) {
+                    messageElement.innerHTML = data.message;
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // CSRF Token Helper Function
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

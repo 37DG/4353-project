@@ -14,7 +14,8 @@ Catalog:
     2.1 def index()
         // input: http request
         // return index.html 
-        // index.html displays the Microsoft login button
+        // index.html displays the Microsoft login button.
+        // The Microsoft login button redirects the user to (2.2) microsoft_login().
     2.2 def microsoft_login()
         // input: http request
         // return redirection to Microsoft login page through Microsoft Azure
@@ -27,8 +28,27 @@ Catalog:
         // It retrieves the authentication code from the request, exchanges it for an access token,
         // and fetches user details from the Microsoft Graph API.
         // Examine the database:
-            // 1. If the user exists in the database, retrieve the user imformation from the database.
-            // 2. 
+            // 1. If the user does not exist in the database, create a new user and store related information in the database.
+                  -- If no previous user existed in the database, the user is automatically set to the role Administrator.
+            // 2. If the user exists in the database, retrieve the user imformation from the database.
+        // Status:
+            // 1. If the user status is '0', return redirection to (2.6) Deactivated_user().
+            // 2. If the user status is '1', return redirection to (???) home().
+    2.5 def profile()
+        // input: http request
+        // Confirm the role of the user through the database.
+        // If the user is with the role Administrator, return redirection to (???) Administrator().
+        // If the user is with the role Basicuser, return redirection to (???) Basicuser().
+   2.6 def Deactivated_user()
+       // input http request
+       // return
+   2.7 def Administrator()
+   2.8 def Basicuser()
+   2.9 def changeUsername()
+   2.10 def create_user()
+   2.11 update_user()
+   2.12 delete_user()
    
-4. urls.py
-5. views.py
+   2.100 def home() 
+   
+

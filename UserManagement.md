@@ -1,54 +1,108 @@
-Catalog:
-1. models.py
-   1.1 class User
-       // This module defines the User model for the application.
-       // It utilizes Django’s ORM (django.db.models) to map Python class objects to relational database tables.
-       attributes:
-           email: char(255), primary key
-           name: char(255)
-           role: char(45)
-           status: char(1)  // '0' for deactivated, '1' for active
+# User Management Documentation
 
-2. views.py
-    2.0 imported packages:
-    2.1 def index()
-        // input: http request
-        // return index.html 
-        // index.html displays the Microsoft login button.
-        // The Microsoft login button redirects the user to (2.2) microsoft_login().
-    2.2 def microsoft_login()
-        // input: http request
-        // return redirection to Microsoft login page through Microsoft Azure
-    2.3 def logout_view()
-        // input: http request
-        // return redirection to Microsoft logout page through Microsoft Azure
-    2.4 def login_view()
-        // input: http request
-        // The login_view function handles the Microsoft OAuth authentication callback.
-        // It retrieves the authentication code from the request, exchanges it for an access token,
-        // and fetches user details from the Microsoft Graph API.
-        // Examine the database:
-            // 1. If the user does not exist in the database, create a new user and store related information in the database.
-                  -- If no previous user existed in the database, the user is automatically set to the role Administrator.
-            // 2. If the user exists in the database, retrieve the user imformation from the database.
-        // Status:
-            // 1. If the user status is '0', return redirection to (2.6) Deactivated_user().
-            // 2. If the user status is '1', return redirection to (???) home().
-    2.5 def profile()
-        // input: http request
-        // Confirm the role of the user through the database.
-        // If the user is with the role Administrator, return redirection to (???) Administrator().
-        // If the user is with the role Basicuser, return redirection to (???) Basicuser().
-   2.6 def Deactivated_user()
-       // input http request
-       // return
-   2.7 def Administrator()
-   2.8 def Basicuser()
-   2.9 def changeUsername()
-   2.10 def create_user()
-   2.11 update_user()
-   2.12 delete_user()
-   
-   2.100 def home() 
-   
+## Table of Contents
+1. [Models](#models)
+   - [User Model](#user-model)
+2. [Views](#views)
+   - [Index](#index)
+   - [Microsoft Login](#microsoft-login)
+   - [Logout](#logout)
+   - [Login](#login)
+   - [Profile](#profile)
+   - [Deactivated User](#deactivated-user)
+   - [Administrator Dashboard](#administrator-dashboard)
+   - [Basic User Dashboard](#basic-user-dashboard)
+   - [Change Username](#change-username)
+   - [User Management](#user-management)
+   - [Home](#home)
 
+---
+
+## Models
+### User Model
+This module defines the `User` model for the application using Django’s ORM (`django.db.models`). It maps Python class objects to relational database tables.
+
+#### Attributes:
+- `email`: `char(255)`, **Primary Key** – Unique identifier for the user.
+- `name`: `char(255)` – User's full name.
+- `role`: `char(45)` – Role assigned to the user (`Administrator` or `Basicuser`).
+- `status`: `char(1)` – Account status:
+  - `'0'` – Deactivated
+  - `'1'` – Active
+
+---
+
+## Views
+
+### Index
+**Function:** `index()`
+- **Input:** HTTP request
+- **Output:** Renders `index.html`
+- **Description:** Displays the Microsoft login button, which redirects the user to `microsoft_login()`.
+
+### Microsoft Login
+**Function:** `microsoft_login()`
+- **Input:** HTTP request
+- **Output:** Redirects to Microsoft login page through Microsoft Azure.
+
+### Logout
+**Function:** `logout_view()`
+- **Input:** HTTP request
+- **Output:** Redirects to Microsoft logout page through Microsoft Azure.
+
+### Login
+**Function:** `login_view()`
+- **Input:** HTTP request
+- **Description:** Handles Microsoft OAuth authentication callback.
+- **Process:**
+  1. Retrieves authentication code from the request.
+  2. Exchanges the code for an access token.
+  3. Fetches user details from the Microsoft Graph API.
+  4. Checks database:
+     - If user does not exist, create a new entry and assign `Administrator` role if they are the first user.
+     - If user exists, retrieve their details from the database.
+  5. User Status Check:
+     - If `status = '0'`, redirect to [`Deactivated_user()`](#deactivated-user).
+     - If `status = '1'`, redirect to [`home()`](#home).
+
+### Profile
+**Function:** `profile()`
+- **Input:** HTTP request
+- **Description:** Confirms user role and redirects:
+  - **Administrator:** Redirect to [`Administrator()`](#administrator-dashboard).
+  - **Basicuser:** Redirect to [`Basicuser()`](#basic-user-dashboard).
+
+### Deactivated User
+**Function:** `Deactivated_user()`
+- **Input:** HTTP request
+- **Output:** Renders a page notifying the user that their account is deactivated.
+
+### Administrator Dashboard
+**Function:** `Administrator()`
+- **Input:** HTTP request
+- **Output:** Administrator panel with relevant controls.
+
+### Basic User Dashboard
+**Function:** `Basicuser()`
+- **Input:** HTTP request
+- **Output:** Basic user panel with limited features.
+
+### Change Username
+**Function:** `changeUsername()`
+- **Input:** HTTP request
+- **Description:** Allows users to change their username.
+
+### User Management
+**Functions:**
+- `create_user()` – Adds a new user to the database.
+- `update_user()` – Updates user details.
+- `delete_user()` – Removes a user from the database.
+
+### Home
+**Function:** `home()`
+- **Input:** HTTP request
+- **Output:** Renders the main home page for logged-in users.
+
+---
+
+**Note:** This documentation serves as a guide to understanding the User Management module, outlining its structure and functionality within the application.

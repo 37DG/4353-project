@@ -16,7 +16,11 @@
    - [User Management](#user-management)
    - [Home](#home)
 3. [Urls](#urls)
-   - [Urlpatterns](#urlpatterns)    
+   - [Urlpatterns](#urlpatterns)
+4. [Imports](#imports)
+   - [Models Import](#models-import)
+   - [Views Import](#views=import)
+   - [Urls Import](#urls-import)
 ---
 
 ## Models
@@ -114,6 +118,37 @@ This module defines the `User` model for the application using Django’s ORM (`
 ### Urlpatterns
 **Description:**
   Includes the path to the corresponding functions in `Views`.
+  
+
+
+---
+## Imports
+
+### Models Import
+``` python
+from django.db import models
+```
+### Views Import
+``` python
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.db import connection
+import json
+import msal
+import requests
+from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from .models import User
+from django.conf import settings
+```
+### Urls Import
+``` python
+from django.urls import path
+from UserManagement import views
+
+```
+
   
 
 

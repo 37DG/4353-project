@@ -80,26 +80,29 @@ This module defines the `User` model for the application using Django’s ORM (`
 ### Administrator Dashboard
 **Function:** `Administrator()`
 - **Input:** HTTP request
-- **Output:** Administrator panel with relevant controls.
+- **Output:** Renders a page for `Administrator` with relevant controls.
 
 ### Basic User Dashboard
 **Function:** `Basicuser()`
 - **Input:** HTTP request
-- **Output:** Basic user panel with limited features.
+- **Output:** Renders a page for `Basicuser` with limited features.
 
 ### Change Username
 **Function:** `changeUsername()`
 - **Input:** HTTP request
-- **Description:** Allows users to change their username.
+- **Description:** Allows `Basicuser` to change their username.
 
 ### User Management
+**Description:**
+  The CRUD function is only applicable for `Administrator`.
+  
 **Functions:**
 - `create_user()` – Adds a new user to the database.
 - `update_user()` – Updates user details.
 - `delete_user()` – Removes a user from the database.
 
 ### Home
-**Function:** `home()`
+**Function:** `home()` in the `Home` application
 - **Input:** HTTP request
 - **Output:** Renders the main home page for logged-in users.
 

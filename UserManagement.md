@@ -15,7 +15,8 @@
    - [Change Username](#change-username)
    - [User Management](#user-management)
    - [Home](#home)
-
+3. [Urls](#urls)
+   - [Urlpatterns](#urlpatterns)    
 ---
 
 ## Models
@@ -105,6 +106,19 @@ This module defines the `User` model for the application using Django’s ORM (`
 **Function:** `home()` in the `Home` application
 - **Input:** HTTP request
 - **Output:** Renders the main home page for logged-in users.
+
+---
+
+## Urls
+
+### Urlpatterns
+**Description:**
+  The CRUD function is only applicable for `Administrator`.
+  
+**Functions:**
+- `create_user()` – Adds a new user to the database.
+- `update_user()` – Updates user details.
+- `delete_user()` – Removes a user from the database.
 
 ---
 

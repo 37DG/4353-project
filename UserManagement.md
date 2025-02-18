@@ -38,7 +38,7 @@ This module defines the `User` model for the application using Django’s ORM (`
 **Function:** `index()`
 - **Input:** HTTP request
 - **Output:** Renders `index.html`
-- **Description:** Displays the Microsoft login button, which redirects the user to `microsoft_login()`.
+- **Description:** Displays the Microsoft login button, which redirects the user to [`microsoft_login()`](#microsoft-login).
 
 ### Microsoft Login
 **Function:** `microsoft_login()`

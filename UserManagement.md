@@ -113,12 +113,9 @@ This module defines the `User` model for the application using Django’s ORM (`
 
 ### Urlpatterns
 **Description:**
-  The CRUD function is only applicable for `Administrator`.
+  Includes the path to the corresponding functions in `Views`.
   
-**Functions:**
-- `create_user()` – Adds a new user to the database.
-- `update_user()` – Updates user details.
-- `delete_user()` – Removes a user from the database.
+
 
 ---
 

@@ -13,11 +13,15 @@ from django.conf import settings
 # Create your views here.
 # Home view
 def home(request):
-    user = {
-        "email": User.objects.get(email=request.session.get("user_email")).email,
-        "name": User.objects.get(email=request.session.get("user_email")).name,
-        "role": User.objects.get(email=request.session.get("user_email")).role,
-        "status": User.objects.get(email=request.session.get("user_email")).status,
-    }
+    try:
+        user = {
+            "email": User.objects.get(email=request.session.get("user_email")).email,
+            "name": User.objects.get(email=request.session.get("user_email")).name,
+            "role": User.objects.get(email=request.session.get("user_email")).role,
+            "status": User.objects.get(email=request.session.get("user_email")).status,
+        }
+    except:
+        print("User not logged in or not created properly.")
+        return redirect('/')
 
     return render(request, 'home.html', {"user": user})

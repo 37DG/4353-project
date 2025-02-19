@@ -5,7 +5,6 @@ from django.db import connection
 import json
 import msal
 import requests
-import base64
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from UserManagement.models import User
@@ -85,7 +84,22 @@ def login_view(request):
             status = '1'  # 1 = Active, 0 = Inactive
 
 
-            sel_user = get_object_or_404(User, email=user_email)
+            try:
+                sel_user = User.objects.get(email=user_email)
+            except User.DoesNotExist:
+                if len(User.objects.all()) == 0:
+                    sel_user = User.objects.create(email=user_email, name=user_name, role="Administrator", status="1")
+                # TODO: Decide proper code action: On first user visit,
+                # Create new user
+                else:
+                    print(f"New user {user_email} created")
+                    sel_user = User.objects.create(email=user_email, name=user_name, role="Basicuser", status="1")
+                # OR
+                # Restrict unknown user access
+                # else:
+                #     print(f"User {user_email} not in database")
+                #     return redirect('/')
+
             role = sel_user.role
             status = sel_user.status
 
@@ -133,8 +147,12 @@ def login_view(request):
 
 
 def profile(request):
-    name = User.objects.get(email=request.session.get("user_email")).name
-    role = User.objects.get(email=request.session.get("user_email")).role
+    try:
+        name = User.objects.get(email=request.session.get("user_email")).name
+        role = User.objects.get(email=request.session.get("user_email")).role
+    except:
+        print("User may not have access to profile.")
+        return redirect('/')
 
     if role == "Administrator":
         return redirect("/Administrator/?name=%s"%name)
@@ -143,8 +161,12 @@ def profile(request):
 
 # Deactivated user view
 def Deactivated_User(request):
-    name = request.GET.get("name", "User")  # Default to 'User' if not found
-    return render(request, 'Deactivated_User.html', {"name": name})
+    try:
+        name = request.GET.get("name", "User")  # Default to 'User' if not found
+        return render(request, 'Deactivated_User.html', {"name": name})
+    except:
+        print("User may not have access to Deactivated User.")
+        return redirect('/')
 
 # Administrator view
 def Administrator(request):
@@ -156,15 +178,22 @@ def Administrator(request):
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
-    # Retrieve username from session for personalized greeting
-    name = request.GET.get("name", "Admin")
+    name = request.GET.get("name")
+    if name == None:
+        print("User may not be logged in.")
+        return redirect('/')
 
     # Pass paginated users and username to the template
     return render(request, "Administrator.html", {"users": page_obj, "name": name})
 
 # Basicuser view
 def Basicuser(request):
-    name = request.GET.get("name", "User")  # Default to 'User' if not found
+
+    name = request.GET.get("name")
+    if name == None:
+        print("User may not be logged in.")
+        return redirect('/')
+    
     return render(request, 'Basicuser.html', {"name": name})
 
 # Basicuer change user name

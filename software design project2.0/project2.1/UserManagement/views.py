@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db import connection
 import json
 import msal
 import requests
+import base64
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-from .models import User
+from UserManagement.models import User
 from django.conf import settings
 
 # The beginning page
@@ -83,27 +84,33 @@ def login_view(request):
             role = "Basicuser"
             status = '1'  # 1 = Active, 0 = Inactive
 
-            with connection.cursor() as cursor:
-                # Check if the user already exists
-                cursor.execute("SELECT role, status FROM usermanagement_user WHERE email=%s", [user_email])
-                existing_user = cursor.fetchone()
 
-                if existing_user:
-                    role, status = existing_user  # Retrieve existing role and status
-                else:
-                    # If no users exist in the system, make the first user an Administrator
-                    cursor.execute("SELECT COUNT(*) FROM usermanagement_user")
-                    user_count = cursor.fetchone()[0]
+            sel_user = get_object_or_404(User, email=user_email)
+            role = sel_user.role
+            status = sel_user.status
 
-                    if user_count == 0:
-                        role = "Administrator"
 
-                    # Insert new user into the database
-                    cursor.execute(
-                        "INSERT INTO usermanagement_user (name, email, role, status) VALUES (%s, %s, %s, %s)",
-                        [user_name, user_email, role, status]
-                    )
-                    print("New user created in the database.")
+            # with connection.cursor() as cursor:
+            #     # Check if the user already exists
+            #     cursor.execute("SELECT role, status FROM usermanagement_user WHERE email=%s", [user_email])
+            #     existing_user = cursor.fetchone()
+
+            #     if existing_user:
+            #         role, status = existing_user  # Retrieve existing role and status
+            #     else:
+            #         # If no users exist in the system, make the first user an Administrator
+            #         cursor.execute("SELECT COUNT(*) FROM usermanagement_user")
+            #         user_count = cursor.fetchone()[0]
+
+            #         if user_count == 0:
+            #             role = "Administrator"
+
+            #         # Insert new user into the database
+            #         cursor.execute(
+            #             "INSERT INTO usermanagement_user (name, email, role, status) VALUES (%s, %s, %s, %s)",
+            #             [user_name, user_email, role, status]
+            #         )
+            #         print("New user created in the database.")
 
             # Store user info in session
             request.session["user_email"] = user_email

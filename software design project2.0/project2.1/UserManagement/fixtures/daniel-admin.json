@@ -1,0 +1,11 @@
+[
+    {
+        "model": "UserManagement.User",
+        "fields": {
+            "email": "dggarza3@cougarnet.uh.edu",
+            "name": "Daniel Garza",
+            "role": "Administrator",
+            "status": "1"
+        }
+    }
+]

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}REQUEST TO WITHHOLD OR RELEASE PUBLIC INFORMATION{% endblock %}
+
+{% block head %}
+<style>
+    .pdf-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    iframe {
+        width: 80%;
+        height: 600px;
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block name %}
+{{ user.name }}
+{% endblock %}
+
+{% block body %}
+<div class="pdf-container">
+    <iframe src="{{ form_url }}public_info1.pdf"></iframe>
+</div>
+
+
+{% endblock %}

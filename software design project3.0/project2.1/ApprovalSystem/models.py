@@ -10,10 +10,10 @@ class Public_info(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
-        choices=[("draft", "Draft"),
-                 ("pending", "Pending"),
-                 ("returned", "Returned"),
-                 ("approved", "Approved"),],
+        choices=[("draft", "draft"),
+                 ("pending", "pending"),
+                 ("returned", "returned"),
+                 ("approved", "approved"),],
         default="draft"
     )
     note = models.CharField(max_length=255, default="", blank=True, null=True)
@@ -55,10 +55,10 @@ class Early_withdrawal(models.Model):
     
     status = models.CharField(
         max_length=20,
-        choices=[("draft", "Draft"),
-                 ("pending", "Pending"),
-                 ("returned", "Returned"),
-                 ("approved", "Approved"),],
+        choices=[("draft", "draft"),
+                 ("pending", "pending"),
+                 ("returned", "returned"),
+                 ("approved", "approved"),],
         default="draft"
     )
     note = models.CharField(max_length=255, default="", blank=True, null=True)

@@ -8,6 +8,7 @@ import requests
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from UserManagement.models import User
+from .models import Public_info, Early_withdrawal
 from django.conf import settings
 
 import os

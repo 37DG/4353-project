@@ -1,0 +1,121 @@
+.navigator-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1f1f1f; /* Fixed dark gray */
+    color: #ffffff; /* White text */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Prevent content from being hidden under the fixed navbar */
+body {
+    margin: 0;
+    padding-top: 80px; /* Adjust based on navbar height */
+    font-family: "Be Vietnam Pro", sans-serif;
+    background-color: var(--c-gray-900);
+    color: var(--c-text-primary);
+    text-align: center;
+}
+
+/* Logo and Title */
+.navigator-logo {
+    max-width: 25%; /* Reduce size to give space for tabs */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.navigator-logo-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navigator-logo-title span:first-child {
+    color: #ffffff; /* Fixed white */
+}
+
+.navigator-logo-title span:last-child {
+    color: #a6a6a6; /* Lighter gray for subtitle */
+    margin-left: 0.5rem;
+}
+
+/* Navigation Container */
+.navigator {
+    flex-grow: 1; /* Ensures it fills remaining space */
+    display: flex;
+    justify-content: flex-end; /* Pushes tabs to the right */
+}
+
+/* Navigation Tabs */
+.navigator-tabs {
+    display: flex;
+    gap: 1rem; /* Reduced space between tabs */
+    flex-wrap: wrap; /* Prevents items from overflowing */
+    max-width: 100%; /* Prevents flex shrinking */
+    overflow: hidden; /* Avoids text clipping */
+}
+
+.navigator-tabs a {
+    color: #a6a6a6; /* Light gray */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    white-space: nowrap; /* Prevents text wrapping */
+    min-width: 70px; /* Ensures links don't shrink too much */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Add margin after the last tab */
+.navigator-tabs a:last-child {
+    margin-right: 2rem; /* Creates spacing after "PROFILE" */
+}
+
+/* Keep the color fixed (no background change on hover) */
+.navigator-tabs a:hover,
+.navigator-tabs a:focus {
+    background-color: #313131; /* Slightly lighter gray */
+    color: #ffffff; /* White text */
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 900px) {
+    .navigator-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .navigator-logo {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .navigator {
+        width: 100%;
+        justify-content: center; /* Center items on small screens */
+    }
+
+    .navigator-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0.5rem;
+        gap: 0.75rem; /* Slightly closer on mobile */
+    }
+
+    .navigator-tabs a {
+        padding: 0.5rem;
+    }
+
+    /* Reduce spacing on smaller screens */
+    .navigator-tabs a:last-child {
+        margin-right: 1rem;
+    }
+}

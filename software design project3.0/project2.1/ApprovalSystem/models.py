@@ -7,7 +7,7 @@ class Public_info(models.Model):
     name = models.CharField(max_length=255, null=False, default="")
     option = models.CharField(max_length=1) # 'A' or 'B'
     ID = models.CharField(max_length=10)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     status = models.CharField(
         max_length=20,
         choices=[("draft", "draft"),
@@ -51,7 +51,7 @@ class Early_withdrawal(models.Model):
     step5_option5 = models.IntegerField() #0 or 1
 
     ID = models.CharField(max_length=10)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     
     status = models.CharField(
         max_length=20,

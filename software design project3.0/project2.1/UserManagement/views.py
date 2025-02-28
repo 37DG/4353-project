@@ -336,7 +336,7 @@ def ReturnPending(request):
         redirection = '/EarlyWithdrawPending/'
 
     record = table.objects.get(email=email)
-    record.status = 'Returned'
+    record.status = 'returned'
     record.note = note
     record.save()
 
@@ -356,7 +356,7 @@ def ApprovePending(request):
         redirection = '/EarlyWithdrawPending/'
 
     record = table.objects.get(email=email)
-    record.status = 'Approved'
+    record.status = 'approved'
     record.save()
 
     return redirect(redirection)

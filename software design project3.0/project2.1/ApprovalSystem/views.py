@@ -168,7 +168,7 @@ def finishPublicInfo(request):
 
 
 
-def EarlyWithdraw(request):
+def EarlyWithdrawal(request):
     user = {
         "email": User.objects.get(email=request.session.get("user_email")).email,
         "name": User.objects.get(email=request.session.get("user_email")).name,

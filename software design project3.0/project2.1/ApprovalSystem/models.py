@@ -38,18 +38,6 @@ class Early_withdrawal(models.Model):
     # if select option 1 for step 3, then input Date or semester of planned return to the U.S
     return_date = models.DateField(null=True)
 
-    # step 4
-    step4_option1 = models.CharField(max_length=1) #'0' or '1', 0 means no, 1 means yes
-    step4_option2 = models.CharField(max_length=1) #0 or 1
-    step4_option3 = models.CharField(max_length=1) #0 or 1
-
-    # step 5
-    step5_option1 = models.CharField(max_length=1) #0 or 1, 0 means no, 1 means yes
-    step5_option2 = models.CharField(max_length=1) #0 or 1
-    step5_option3 = models.CharField(max_length=1) #0 or 1
-    step5_option4 = models.CharField(max_length=1) #0 or 1, 0 means no, 1 means yes
-    step5_option5 = models.CharField(max_length=1) #0 or 1
-
     ID = models.CharField(max_length=10)
     date = models.DateTimeField()
     

@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}Authorized Early Withdrawal Form{% endblock %}
+
+{% block head %}
+<style>
+    .pdf-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    iframe {
+        width: 80%;
+        height: 600px;
+        border: none;
+    }
+
+    /* Form Styling */
+    .form-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background: #f9f9f9;
+        border-radius: 5px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        font-weight: bold;
+    }
+    .form-group input, 
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .btn-action {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-action:hover {
+        background-color: #0056b3;
+    }
+    .note-box {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        background: #ffffe0;
+        border-radius: 5px;
+    }
+    /* Hide course input fields initially */
+    .hidden {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block name %}
+{{ user.name }}
+{% endblock %}
+
+{% block body %}
+<!-- PDF Viewer -->
+<div class="pdf-container">
+    <iframe src="{{ form_url }}authorized-early-withdrawal-f1.pdf"></iframe>
+</div>
+
+<!-- Form for User Input -->
+<div class="form-container">
+    <h2>Fill in Your Information</h2>
+    <form id="EarlyWithdrawForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" value="{{ user.name }}" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" value="{{ user.email }}" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="id">SSN or Student ID:</label>
+            <input type="text" id="id" name="id" placeholder="{{ record.ID }}" required>
+        </div>
+
+        <!-- Step 1: Plans for Departure -->
+        <div class="form-group">
+            <label for="step1_option">Step 1: Plans for Departure</label>
+            <select id="step1_option" name="step1_option" required>
+                <option value="">-- Select Your Departure Plan --</option>
+                <option value= '1' {% if record.step1_option == '1' %}selected{% endif %}>
+                    I am currently enrolled in classes. I will drop all my courses and leave the U.S. within 15 days.
+                </option>
+                <option value= '2' {% if record.step1_option == '2' %}selected{% endif %}>
+                    I am currently enrolled and will leave the U.S. within 15 days but keep some courses.
+                </option>
+                <option value= '3' {% if record.step1_option == '3' %}selected{% endif %}>
+                    I am not enrolled (or will unenroll) and will leave the U.S. before the last day to add classes.
+                </option>
+            </select>
+        </div>
+
+        <!-- If user selects "keep_some", show fields to enter up to 3 courses -->
+        <div id="dropCoursesField" class="hidden">
+            <label for="drop_courses">Enter up to three courses you plan to drop:</label>
+            <div class="form-group">
+                <input type="text" id="drop_course1" name="drop_course1" placeholder="Course 1 (e.g., MATH101)">
+            </div>
+            <div class="form-group">
+                <input type="text" id="drop_course2" name="drop_course2" placeholder="Course 2 (Optional)">
+            </div>
+            <div class="form-group">
+                <input type="text" id="drop_course3" name="drop_course3" placeholder="Course 3 (Optional)">
+            </div>
+        </div>
+
+        <!-- Step 2: Departure Method -->
+        <div class="form-group">
+            <label for="departure_date">Step 2: Date of Departure</label>
+            <input type="date" id="departure_date" name="departure_date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="step2_option">Step 2: How will you depart?</label>
+            <select id="step2_option" name="step2_option" required>
+                <option value="">-- Select Departure Method --</option>
+                <option value="1" {% if record.step2_option == 1 %}selected{% endif %}>
+                    I have attached a flight itinerary to verify my departure date.
+                </option>
+                <option value="2" {% if record.step2_option == 2 %}selected{% endif %}>
+                    I am driving/have driven across the Canadian or Mexican border.
+                </option>
+            </select>
+        </div>
+
+        <!-- Step 3: Return Plans -->
+        <div class="form-group">
+            <label for="step3_option">Step 3: Return Plans</label>
+            <select id="step3_option" name="step3_option" required>
+                <option value="">-- Select Your Return Plan --</option>
+                <option value="1" {% if record.step3_option == 1 %}selected{% endif %}>
+                    I plan to return to the U.S. in a future semester.
+                </option>
+                <option value="2" {% if record.step3_option == 2 %}selected{% endif %}>
+                    I do not plan to return to the U.S. to continue my studies.
+                </option>
+            </select>
+        </div>
+
+        <!-- If Step 3 Option 1 is selected, show return date input -->
+        <div id="returnDateField" class="hidden">
+            <label for="return_date">Expected Return Date or Semester:</label>
+            <input type="date" id="return_date" name="return_date">
+        </div>
+
+        <!-- Step 4: Acknowledgements -->
+        <div class="step-section">
+            <h3>Step 4: Acknowledgements (Check All)</h3>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step4_option1" name="step4_option1" value="1" required>
+                <label for="step4_option1">I understand that my current I-20 will be terminated, and I cannot re-enter the U.S. on this I-20 and SEVIS ID.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step4_option2" name="step4_option2" value="1" required>
+                <label for="step4_option2">I understand that my F-1 “clock” will start over in regards to being eligible for CPT or OPT due to an absence from classes for more than five (5) months.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step4_option3" name="step4_option3" value="1" required>
+                <label for="step4_option3">I have informed my academic department regarding leaving the U.S.</label>
+            </div>
+        </div>
+
+        <!-- Step 5: Additional Responsibilities -->
+        <div class="step-section">
+            <h3>Step 5: Additional Responsibilities (Check All)</h3>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step5_option1" name="step5_option1" value="1" required>
+                <label for="step5_option1">I have checked my student account for any holds and unpaid balances.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step5_option2" name="step5_option2" value="1" required>
+                <label for="step5_option2">I have contacted my academic advisor about my plans to withdraw.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step5_option3" name="step5_option3" value="1" required>
+                <label for="step5_option3">I have notified my housing provider about my departure.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step5_option4" name="step5_option4" value="1" required>
+                <label for="step5_option4">I have canceled any recurring subscriptions or services tied to my U.S. address.</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="step5_option5" name="step5_option5" value="1" required>
+                <label for="step5_option5">I have reviewed my health insurance coverage and taken necessary action.</label>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label for="signature">Upload Your Signature:</label>
+            <input type="file" id="signature" name="signature" accept="image/*" required>
+        </div>
+
+        <!-- Buttons for Save and Submit -->
+        <div class="button-container">
+            <button type="button" class="btn-action btn-save" onclick="submitForm('/approvalsystem/saveEarlyWithdrawal/')">Save as Draft</button>
+            <button type="button" class="btn-action btn-submit" onclick="submitForm('/approvalsystem/saveEarlyWithdrawal/')">Submit</button>
+        </div>
+    </form>
+
+    <div class="note-box">
+        <h3>Notes</h3>
+        <p>{{ record.note }}</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let step1Select = document.getElementById("step1_option");
+        let dropCoursesField = document.getElementById("dropCoursesField");
+        let courseInputs = document.querySelectorAll("#dropCoursesField input");
+
+        let step3Select = document.getElementById("step3_option");
+        let returnDateField = document.getElementById("returnDateField");
+        let returnDateInput = document.getElementById("return_date");
+
+        // Show course input fields only if "keep_some" is selected
+        step1Select.addEventListener("change", function() {
+            if (step1Select.value === '2') {
+                dropCoursesField.classList.remove("hidden");
+            } else {
+                dropCoursesField.classList.add("hidden");
+                courseInputs.forEach(input => {
+                    input.value = "";});
+            }
+        });
+
+        step3Select.addEventListener("change", function() {
+            if (step3Select.value === '1') {
+                returnDateField.classList.remove("hidden");
+            } else {
+                returnDateField.classList.add("hidden");
+                returnDateInput.value = "";
+            }
+        });
+    });
+
+    function submitForm(actionUrl) {
+        let Id = document.getElementById("id").value.trim();
+        let step1_option = document.getElementById("step1_option").value;
+        let departure_date = document.getElementById("departure_date").value;
+        let step2_option = document.getElementById("step2_option").value;
+        let step3_option = document.getElementById("step3_option").value;
+        let return_date = document.getElementById("return_date").value;
+        let step4_option1 = document.getElementById("step4_option1").checked;
+        let step4_option2 = document.getElementById("step4_option2").checked;
+        let step4_option3 = document.getElementById("step4_option3").checked;
+        let step5_option1 = document.getElementById("step5_option1").checked;
+        let step5_option2 = document.getElementById("step5_option2").checked;
+        let step5_option3 = document.getElementById("step5_option3").checked;
+        let step5_option4 = document.getElementById("step5_option4").checked;
+        let step5_option5 = document.getElementById("step5_option5").checked;
+        let signature = document.getElementById("signature").files.length;
+
+        if (Id === "") {
+            alert("ID is required.");
+            return;
+        }
+        if (step1_option === "") {
+            alert("Please select a departure plan in Step 1.");
+            return;
+        }
+        if (step1_option === "2") {
+            let drop_course1 = document.getElementById("drop_course1").value.trim();
+            let drop_course2 = document.getElementById("drop_course2").value.trim();
+            let drop_course3 = document.getElementById("drop_course3").value.trim();
+            
+            if (drop_course1 === "" && drop_course2 === "" && drop_course3 === "") {
+                alert("You must enter at least one course if you select to keep some courses.");
+                return;
+            }
+        }
+        // Validate Step 2: Departure Date
+        if (departure_date === "") {
+            alert("Please select your departure date.");
+            return;
+        }
+
+        // Validate Step 2: Departure Method
+        if (step2_option === "") {
+            alert("Please select how you will depart.");
+            return;
+        }
+        if (step3_option === "") {
+            alert("Please select a return plan in Step 3.");
+            return;
+        }
+        if (!step4_option1 || !step4_option2 || !step4_option3) {
+            alert("You must check all acknowledgements in Step 4.");
+            return;
+        }
+        if (!step5_option1 || !step5_option2 || !step5_option3 || !step5_option4 || !step5_option5) {
+            alert("You must check all responsibilities in Step 5.");
+            return;
+        }
+        if (signature === 0) {
+            alert("Please upload your signature.");
+            return;
+        }
+
+        let form = document.getElementById("EarlyWithdrawForm");
+        form.action = actionUrl;
+        form.submit();
+    }
+</script>
+
+{% endblock %}

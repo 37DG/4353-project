@@ -25,9 +25,9 @@ class Early_withdrawal(models.Model):
     # step 1
     step1_option = models.IntegerField() #1 or 2 or 3
     # if select option 2 for step 1, then input the course name
-    drop_course1 = models.CharField(max_length=15)
-    drop_course2 = models.CharField(max_length=15)
-    drop_course3 = models.CharField(max_length=15)
+    drop_course1 = models.CharField(max_length=15, default="", blank=True, null=True)
+    drop_course2 = models.CharField(max_length=15, default="", blank=True, null=True)
+    drop_course3 = models.CharField(max_length=15, default="", blank=True, null=True)
 
     # step 2
     departure_date = models.DateField()
@@ -36,7 +36,7 @@ class Early_withdrawal(models.Model):
     # step 3
     step3_option = models.IntegerField() #1 or 2
     # if select option 1 for step 3, then input Date or semester of planned return to the U.S
-    return_date = models.DateField()
+    return_date = models.DateField(null=True)
 
     # step 4
     step4_option1 = models.IntegerField() #0 or 1, 0 means no, 1 means yes

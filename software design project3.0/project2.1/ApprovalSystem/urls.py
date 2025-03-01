@@ -20,5 +20,5 @@ urlpatterns = [
     path('finishPublicInfo/', views.finishPublicInfo, name='FinishPublicInfo'),
 
     # Early withdraw form
-    path('EarlyWithdraw/', views.EarlyWithdraw, name='EarlyWithdraw'),
+    path('EarlyWithdrawal/', views.EarlyWithdrawal, name='EarlyWithdrawal'),
 ]

@@ -176,4 +176,4 @@ def EarlyWithdrawal(request):
         "status": User.objects.get(email=request.session.get("user_email")).status,
     }
 
-    return render(request, 'EarlyWithdraw.html', {"user": user, "form_url": settings.MEDIA_URL})
+    return render(request, 'EarlyWithdrawal.html', {"user": user, "form_url": settings.MEDIA_URL})

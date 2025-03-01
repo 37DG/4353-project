@@ -306,8 +306,8 @@ def PublicInformationPending(request):
 
 
 # EarlyWithdraw form Pending
-def EarlyWithdrawPending(request):
-    return render(request, 'EarlyWithdrawPending.html')
+def EarlyWithdrawalPending(request):
+    return render(request, 'EarlyWithdrawalPending.html')
 
 
 # View Pending form details

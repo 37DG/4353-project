@@ -34,7 +34,7 @@ urlpatterns = [
 
     # Pending
     path('PublicInformationPending/', views.PublicInformationPending, name='ReleasePublicInformationPending'),
-    path('EarlyWithdrawPending/', views.EarlyWithdrawPending, name='EarlyWithdrawPending'),
+    path('EarlyWithdrawalPending/', views.EarlyWithdrawalPending, name='EarlyWithdrawalPending'),
 
     # view pending
     path('ViewPending/', views.ViewPending, name='ViewPending'),

@@ -331,9 +331,9 @@ def ReturnPending(request):
     if form == 'PublicInfo':
         table = Public_info
         redirection = '/PublicInformationPending/'
-    elif form == 'EarlyWithdraw':
+    elif form == 'EarlyWithdrawal':
         table = Early_withdrawal
-        redirection = '/EarlyWithdrawPending/'
+        redirection = '/EarlyWithdrawalPending/'
 
     record = table.objects.get(email=email)
     record.status = 'returned'
@@ -351,9 +351,9 @@ def ApprovePending(request):
     if form == 'PublicInfo':
         table = Public_info
         redirection = '/PublicInformationPending/'
-    elif form == 'EarlyWithdraw':
+    elif form == 'EarlyWithdrawal':
         table = Early_withdrawal
-        redirection = '/EarlyWithdrawPending/'
+        redirection = '/EarlyWithdrawalPending/'
 
     record = table.objects.get(email=email)
     record.status = 'approved'

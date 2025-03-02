@@ -307,7 +307,22 @@ def PublicInformationPending(request):
 
 # EarlyWithdraw form Pending
 def EarlyWithdrawalPending(request):
-    return render(request, 'EarlyWithdrawalPending.html')
+    role = request.session.get("user_role")
+
+    if role == "Reviewer":
+        records = Early_withdrawal.objects.filter(review_status="Pending")  # Only pending review
+    elif role == "Approver":
+        records = Early_withdrawal.objects.filter(review_status="Reviewed", status="Pending")  # Reviewed, pending approval
+    else:
+        records = Early_withdrawal.objects.filter(status="Pending")  # For Admin or others
+
+    paginator = Paginator(records, 5)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    name = request.session.get("user_name", "User")
+
+    return render(request, "EarlyWithdrawalPending.html", {"records": page_obj, "name": name, "role": role})
 
 
 # View Pending form details

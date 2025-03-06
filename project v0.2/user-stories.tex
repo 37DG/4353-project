@@ -1,0 +1,178 @@
+%% Setup to use an index card
+\documentclass[10pt]{book}
+\usepackage[vcentering,dvips]{geometry}
+\geometry{papersize={3in,5in},total={2.9in,4.9in}}
+
+%% render a frame marking the margins of a document
+% \usepackage{showframe}
+
+%% show landscape view
+\usepackage{pdflscape}
+
+%% Use for testing by filling junk (lorem-ipsum) information
+\usepackage{lipsum}
+
+\begin{document}
+
+\begin{landscape}
+\section*{Student submitting form 1 (RPI)}
+As a student,\\
+I want to submit an RPI form,\\
+So that I can request to withhold/release my academic information.\\
+\\
+Specific: Student requesting a certain form.\\
+Measurable: Can submit or cannot submit\\
+Achievable: Form creation and submission is a core part of HTML.\\
+Relevant (5 Why's)\\
+    \indent
+    UH has the form available for students to submit.\\
+    \indent
+    It is required by law for universities to have it.\\
+    \indent
+    It ensures students can control their privacy and own their own information.\\
+    \indent
+    According to modern law and beliefs, privacy is a birthright.\\
+    \indent
+    People don't like being unwillingly publicized.\\
+Time-bound: Possible within one sprint
+\end{landscape}
+
+\begin{landscape}
+\section*{Student submitting form 2 (Early withdrawal)}
+As an international student,\\
+I want to submit an Early Withdrawal form,\\
+So that I can leave the UH system and/or the US.\\
+\\
+Specific: Student requesting a certain form.\\
+Measurable: Can submit or cannot submit\\
+Achievable: Form creation and submission is a core part of HTML.\\
+Relevant (5 Why's)\\
+    \indent
+    An international student may need to fill out an Early Withdrawal form.\\
+    \indent
+    They may need to leave the US during their academic career.\\
+    \indent
+    The form allows students to leave without harming their academic status.\\
+    \indent
+    Not every student should be expected to complete their degree.\\
+    \indent
+    Medical leave, financial reasons, or family emergencies may force their hand.\\
+Time-bound: Possible within one sprint
+\end{landscape}
+
+\begin{landscape}
+\section*{Student editing submission}
+As a student who previously submitted a form which has not been approved,\\
+I want to edit my existing submission,\\
+So that I can submit a form with the correct information.\\
+\\
+Specific: A feature that is only available under certain conditions.\\
+Measurable: Can edit or cannot edit\\
+Achievable: Submitting an edited form is just form creation with extra processing.\\
+Relevant (5 Why's)\\
+    \indent
+    A student's original submission could have been returned.\\
+    \indent
+    It could contain errors or missing information.\\
+    \indent
+    All submissions cannot be expected to be perfect on the first try.\\
+    \indent
+    Submitters may have mistyped or input inaccurate information.\\
+    \indent
+    We are all only human.\\
+Time-bound: Possible within one sprint
+\end{landscape}
+
+\begin{landscape}
+\section*{Student viewing submission status}
+As a student who previously submitted a form,\\
+I want to view the status of my submission,\\
+So that I can know whether it has been approved or not.\\
+\\
+Specific: A certain type of student in a particular situation.\\
+Measurable: Can see status or cannot see status\\
+Achievable: Already would be viewable from the reviewer process\\
+Relevant (5 Why's)\\
+    \indent
+    A student must know if their form was approved.\\
+    \indent
+    If their form was returned or otherwise not approved, they cannot continue.\\
+    \indent
+    A returned form contains errors that prevent processing.\\
+    \indent
+    Errors in a form may result in the form not actually being useful to the submitter.\\
+    \indent
+    Typos or missing information may mean the form is not legally valid.\\
+Time-bound: Easily possible if done after reviewer flow implementation.
+\end{landscape}
+
+\begin{landscape}
+\section*{Reviewer viewing pending submissions}
+As a reviewer,\\
+I want to be able to see all pending submissions in a table,\\
+So that I can approve or return them.\\
+\\
+Specific: A selected role and a defined view.\\
+Measurable: Can see pending submissions or not\\
+Achievable: Submissions are already stored - would just need to display.\\
+Relevant (5 Why's)\\
+    \indent
+    A reviewer needs to see pending submissions.\\
+    \indent
+    So they can do their job\\
+    \indent
+    So forms can be properly processed\\
+    \indent
+    So submitters can have their forms approved\\
+    \indent
+    So students can accomplish what they desired from submitting their forms.\\
+Time-bound: Quickly possible after implementation of submission systems.
+\end{landscape}
+
+\begin{landscape}
+\section*{Reviewer approving or returning}
+As a reviewer,\\
+I want to approve or return pending forms,\\
+So that students can fulfill their submission or correct any errors.\\
+\\
+Specific: A certain role performing certain tasks.\\
+Measurable: Can approve/return or not\\
+Achievable: Can reuse actions taken during submission\\
+Relevant (5 Why's)\\
+    \indent
+    Reviewers must be able to review forms.\\
+    \indent
+    Reviewed forms can be approved or returned\\
+    \indent
+    Unreviewed forms block students from doing what they need to do.\\
+    \indent
+    Universities must eventually approve submitted forms.\\
+    \indent
+    It is legally required.\\
+Time-bound: Possible within one sprint
+\end{landscape}
+
+\begin{landscape}
+\section*{Reviewer leaving notes}
+As a reviewer returning a form,\\
+I want to send a note to the submitter,\\
+So that they can know why the form was returned and what they should fix.\\
+\\
+Specific: A certain role performing a certain task.\\
+Measurable: Can add a note or cannot add a note\\
+Achievable: Extension of reviewer approval/return flow\\
+Relevant (5 Why's)\\
+    \indent
+    A submitter should know what needs to be fixed.\\
+    \indent
+    If they don't know, they cannot fix it.\\
+    \indent
+    The submitter might not know what is wrong.\\
+    \indent
+    They might have misunderstood, misread, or skipped a question.\\
+    \indent
+    People make mistakes.\\
+Time-bound: Easily possible after implementation of form approval/return.
+\end{landscape}
+
+\end{document}

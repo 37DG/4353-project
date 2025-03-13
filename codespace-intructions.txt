@@ -1,0 +1,65 @@
+1. Go to github.com/codespaces
+2. Press 'New codespace'
+	a. Repository: 37DG/4353-project
+	b. Branch: main
+	c. Region: whatever
+	d. Machine type: 2-core
+	e. Create codespace
+3. In the bottom terminal, type:
+	a. cd software\ design\ project3.0/project2.1/
+	b. pip install -r requirements.txt
+	c. docker run --name mysql-dev -e MYSQL_ROOT_PASSWORD=5847 -d mysql:latest
+	d. docker exec -it mysql-dev /bin/bash
+	e. mysql -p
+	f. 5847
+	g. CREATE DATABASE project;
+	h. exit
+	i. exit
+	j. python manage.py migrate
+	k. python manage.py runserver
+4. Open the application in a new tab.
+5. Copy the URL of the website.
+	It should look like https://<words>-<characters>-8000.app.github.dev/
+6. Look for the ~/.gitignore file in the file tree
+	a. Add:
+		.gitignore
+		*.pyc
+7. Open a new tab and go to https://entra.microsoft.com#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade/quickStartType~/null/sourceType/Microsoft_AAD_IAM
+	a. After logging in, click 'New registration'
+	b. Set a display name
+	c. Set supported account types to: 'Accounts in this organizational directory only...'
+	d. Click Register
+	e. On the left menu, select 'App registrations'
+	f. Select the App registration you created
+	g. Copy the 'Application (client) ID'
+		-- This is your CLIENT_ID
+	h. Select 'Add a certificate or secret'
+	i. Select 'New client secret'
+	j. Create a description and select 'Add'
+	k. Copy the 'Value'
+		-- This is your CLIENT_SECRET
+	l. In the inner left menu, select 'Authentication' under the 'Manage' category
+	m. Set the redirect URI to the URL from step 4 + /auth/callback
+		ex. https://congenial-space-journey-977vj9wrxvgg2qrw-8000.app.github.dev/
+	becomes https://congenial-space-journey-977vj9wrxvgg2qrw.github.dev/auth/callback
+		-- This is your REDIRECT_URI
+	n. Set the Front-channel logout URL to the URL from step 4
+		-- This is your LOGOUT_REDIRECT_URI
+
+8. Go to ~/software design project3.0/project2.1/project/settings.py
+	a. Scroll down and look for the line DATABASES = {
+	b. Within the DATABASES object, replace
+		'HOST':'127.0.0.1'
+	with
+		'HOST':'172.17.0.2'
+	c. Scroll down and look for the line MICROSOFT_AUTH = {
+	d. Within the MICROSOFT_AUTH object, replace
+		"CLIENT_ID"
+		"CLIENT_SECRET"
+		"REDIRECT_URI"
+		"LOGOUT_REDIRECT_URI"
+	with the items from step 7
+
+You should now be able to start the webapp and log in using your UH Microsoft account.
+
+I haven't gotten LaTeX stuff working for codespaces yet since it currently relies on local solutions.

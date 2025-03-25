@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 50px;
+}
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    color: #dc3545;
+}
+p {
+    font-size: 18px;
+    color: #333;
+}
+.emoji {
+    font-size: 24px;
+}
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    cursor: pointer;
+}
+.btn:hover {
+    background: linear-gradient(135deg, #0056b3, #00408b);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.6);
+    transform: scale(1.05);
+}
+.btn-logout {
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    margin-left: 10px;
+}
+.btn-logout:hover {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    box-shadow: 0 0 12px rgba(255, 75, 43, 0.6);
+}

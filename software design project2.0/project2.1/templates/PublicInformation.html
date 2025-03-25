@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}REQUEST TO WITHHOLD OR RELEASE PUBLIC INFORMATION{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/PublicInformation.css' %}">
+{% endblock %}
+
+{% block name %}
+{{ user.name }}
+{% endblock %}
+
+{% block body %}
+<div class="pdf-container">
+    <iframe src="{{ form_url }}public_info1.pdf"></iframe>
+</div>
+
+<!-- Form for User Input -->
+<div class="form-container">
+    <h2>Fill in Your Information</h2>
+    <form id="publicInfoForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" value="{{ user.name }}" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" value="{{ user.email }}" required readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="id">SSN or Student ID:</label>
+            <input type="text" id="id" name="id" placeholder="{{record.ID}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="request_type">Request Type:</label>
+            <select id="request_type" name="request_type" required>
+                <option value="" >-- Select --</option>
+                <option value="A" {% if record.option == "A" %}selected{% endif %}>
+                    I request that my public information NOT be released
+                </option>
+                <option value="B" {% if record.option == "B" %}selected{% endif %}>
+                    I am terminating my previous request and allow the release
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="signature">Upload Your Signature:</label>
+            <input type="file" id="signature" name="signature" accept="image/*" required>
+        </div>
+
+        <!-- Buttons for Save and Submit -->
+        <div class="button-container">
+            <button type="button" class="btn-action btn-save" onclick="submitForm('/approvalsystem/savePublicInfo/')">Save</button>
+            <button type="button" class="btn-action btn-submit" onclick="submitForm('/approvalsystem/submitPublicInfo/')">Submit</button>
+        </div>
+    </form>
+
+    <div class="note-box">
+        <h3>Notes</h3>
+        <p>{{ record.note }}</p>
+    </div>
+</div>
+
+<script>
+    function submitForm(actionUrl) {
+        let Id = document.getElementById("id").value.trim();
+        let requestType = document.getElementById("request_type").value;
+        let signature = document.getElementById("signature").files.length;
+
+        if (Id === "") {
+            alert("ID is required.");
+            return;
+        }
+        if (requestType === "") {
+            alert("Please select a request type.");
+            return;
+        }
+        if (signature === 0) {
+            alert("Please upload your signature.");
+            return;
+        }
+        
+        
+        let form = document.getElementById("publicInfoForm");
+        form.action = actionUrl;
+        form.submit();
+    }
+</script>
+{% endblock %}

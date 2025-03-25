@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Menu{% endblock %}
+
+{% block head %}
+<style>
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block name%}
+{{ user.name }}
+{% endblock %}
+
+{% block body %}
+<div class="button-container">
+    <a href="/approvalsystem/PublicInformation/" class="btn">Release Public Information</a>
+    <a href="/approvalsystem/EarlyWithdrawal/" class="btn">Early Withdraw</a>
+</div>
+{% endblock %}

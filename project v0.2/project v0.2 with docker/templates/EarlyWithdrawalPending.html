@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Early Withdrawal Requests{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/EarlyWithdrawalPending.css' %}">
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="header">
+            <h1>Welcome back, {{ name }}</h1>
+        </div>
+        <p>Pending Release Early Withdrawal Requests:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.ID }}</td>
+                    <td>{{ record.date|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ record.status }}</td>
+                    <td>
+                        <a href="/ViewPending/?name={{ record.name|urlencode }}&form=EarlyWithdrawal&date={{ record.date|date:'Y-m-d_H_i_s'|urlencode }}&email={{record.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if records.has_previous %}
+                <button onclick="window.location.href='?page={{ records.previous_page_number }}'">Previous</button>
+            {% endif %}
+            <span>Page {{ records.number }} of {{ records.paginator.num_pages }}</span>
+            {% if records.has_next %}
+                <button onclick="window.location.href='?page={{ records.next_page_number }}'">Next</button>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

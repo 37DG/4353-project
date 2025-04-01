@@ -158,12 +158,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###############################################################################################################
 MICROSOFT_AUTH = {
-    "CLIENT_ID": "87c9d60f-c50b-42b2-bcef-bc7a0eb0c4e8",
-    "TENANT_ID": "170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259",
-    "CLIENT_SECRET": "nfe8Q~F6G9EYqLEM3~gq_zkcMtmN-67zq4PUocTy",#put the secret right here
-    "AUTHORITY": f"https://login.microsoftonline.com/170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259",
-    "REDIRECT_URI": "http://localhost:8000/auth/callback/",
-    "LOGOUT_REDIRECT_URI": "http://localhost:8000/",
+    "CLIENT_ID": os.getenv('PROJECT_CLIENT_ID'),
+    "TENANT_ID": os.getenv('PROJECT_TENANT_ID', '170bbabd-a2f0-4c90-ad4b-0e8f0f0c4259'),
+    "CLIENT_SECRET": os.getenv('PROJECT_CLIENT_SECRET'),
+    "AUTHORITY": f"https://login.microsoftonline.com/{os.getenv('PROJECT_TENANT_ID')}",
+    "REDIRECT_URI": os.getenv('PROJECT_REDIRECT_URI'),
+    "LOGOUT_REDIRECT_URI": os.getenv('PROJECT_LOGOUT_REDIRECT_URI'),
 }
-
 

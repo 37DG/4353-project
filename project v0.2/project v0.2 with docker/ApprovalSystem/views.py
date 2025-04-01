@@ -84,7 +84,7 @@ def savePublicInfo(request):
             }
         )
 
-        return redirect('http://localhost:8000/approvalsystem')
+        return redirect('/approvalsystem')
 
 # Feature for user to submit the public information request
 def submitPublicInfo(request):
@@ -156,7 +156,7 @@ def finishPublicInfo(request):
     record.note = ''
     record.save()
 
-    return redirect('http://localhost:8000/approvalsystem')
+    return redirect('/approvalsystem')
 
 
 
@@ -242,7 +242,7 @@ def saveEarlyWithdrawal(request):
             record.return_date = return_date
             record.save()
 
-        return redirect('http://localhost:8000/approvalsystem')
+        return redirect('/approvalsystem')
     
 # Feature for user to submit the public information request
 def submitEarlyWithdrawal(request):
@@ -360,4 +360,4 @@ def finishEarlyWithdrawal(request):
     record.note = ''
     record.save()
 
-    return redirect('http://localhost:8000/approvalsystem')
+    return redirect('/approvalsystem')

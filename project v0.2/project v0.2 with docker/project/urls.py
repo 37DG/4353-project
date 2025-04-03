@@ -28,4 +28,6 @@ urlpatterns = [
     path('home/',include('Home.urls')),
 
     path('approvalsystem/', include('ApprovalSystem.urls')),
+
+    path('approvalmerge/', include('ApprovalMerge.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.PDF_URL, document_root=settings.PDF_ROOT)

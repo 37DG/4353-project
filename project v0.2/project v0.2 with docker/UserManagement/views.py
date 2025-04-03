@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from ApprovalSystem.models import Public_info, Early_withdrawal
+from ApprovalMerge.models import GraduateStudentPetition as Grad_petition
 from django.conf import settings
 
 import os
@@ -321,6 +322,22 @@ def EarlyWithdrawalPending(request):
     # Pass paginated users and username to the template
     return render(request, "EarlyWithdrawalPending.html", {"records": page_obj, "name": name})
 
+# GradPetition form Pending
+def GradPetitionPending(request):
+    # Query all records from Grad_petition table
+    records = Grad_petition.objects.filter(status='Pending')
+
+    # Paginate the data (5 records per page)
+    paginator = Paginator(records, 5)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Retrieve username from session for personalized greeting
+    name = request.session.get("user_name", "User")
+
+    # Pass paginated users and username to the template
+    return render(request, "GradPetitionPending.html", {"records": page_obj, "name": name})
+
 # View Pending form details
 def ViewPending(request):
     name = request.session.get("user_name", "User")
@@ -345,6 +362,12 @@ def ReturnPending(request):
     elif form == 'EarlyWithdrawal':
         table = Early_withdrawal
         redirection = '/EarlyWithdrawalPending/'
+    elif form == 'GradPetition':
+        table = Grad_petition
+        redirection = '/GradPetitionPending/'
+    # elif form == 'UGradTransfer':
+        # table = UGrad_transfer
+        # redirection = '/UGradTransferPending/'
 
     record = table.objects.get(email=email)
     record.status = 'returned'
@@ -365,6 +388,12 @@ def ApprovePending(request):
     elif form == 'EarlyWithdrawal':
         table = Early_withdrawal
         redirection = '/EarlyWithdrawalPending/'
+    elif form == 'GradPetition':
+        table = Grad_petition
+        redirection = '/GradPetitionPending/'
+    # elif form == 'UGradTransfer':
+        # table = UGrad_transfer
+        # redirection = '/UGradTransferPending/'
 
     record = table.objects.get(email=email)
     record.status = 'approved'

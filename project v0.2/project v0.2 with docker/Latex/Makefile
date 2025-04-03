@@ -3,6 +3,9 @@ TEX_NAME ?= resume.tex
 TEX_BASENAME = $(basename $(TEX_NAME))
 PDFBASENAME ?= output  # Default base name if not provided
 
+# From merge
+TEX_FILE ?= petition
+
 # public_info parameters
 PUBLIC_INFO_OPTIONA ?= X
 PUBLIC_INFO_OPTIONB ?= X
@@ -77,3 +80,10 @@ buildEarlyWithdrawal: $(TEX_NAME)
 # ========= CLEAN =============
 clean:
 	rm -f $(PDF_DIR)/*.aux $(PDF_DIR)/*.log $(PDF_DIR)/*.out $(PDF_DIR)/*.pdf
+
+
+buildGradPetition: $(TEX_FILE)
+	@echo "Running pdflatex for buildGradPetition..."
+	[ -d $(PDF_DIR) ] || mkdir -p $(PDF_DIR)
+	[ -f $(PDF_DIR)/$(PDFBASENAME).pdf ] && rm -f $(PDF_DIR)/$(PDFBASENAME).pdf || true
+	pdflatex -interaction=nonstopmode -output-directory=$(PDF_DIR) $(TEX_FILE)

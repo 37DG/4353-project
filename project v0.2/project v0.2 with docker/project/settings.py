@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'UserManagement',
     'Home',
     'ApprovalSystem',
+    'ApprovalMerge',
 ]
 
 MIDDLEWARE = [

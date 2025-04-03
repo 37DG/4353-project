@@ -35,6 +35,8 @@ urlpatterns = [
     # Pending
     path('PublicInformationPending/', views.PublicInformationPending, name='ReleasePublicInformationPending'),
     path('EarlyWithdrawalPending/', views.EarlyWithdrawalPending, name='EarlyWithdrawalPending'),
+    path('GradPetitionPending/', views.GradPetitionPending, name='GradPetitionPending'),
+    # path('UGradTransferPending/', views.UGradTransferPending, name='UGradTransferPending'),
 
     # view pending
     path('ViewPending/', views.ViewPending, name='ViewPending'),

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graduate Student Petition Form</title>
+    <link rel="stylesheet" href="{% static 'css/GradPetition.css' %}">
+    <script src="{% static 'js/GradPetition.js' %}" defer></script>
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="/home" class="logo">Home</a>
+      </div>
+      <span>Welcome, {{ user.first_name }}</span>
+      <a href="/profile" class="btn">Profile</a>
+    </nav>
+    {% if record %}
+    <div id="note-area">
+      <h1>Form Returned</h1>
+      <p>Reason: {{ record.note }}</p>
+    </div>
+    {% endif %}
+    <div class="container">
+      <div class="header">
+        <h1>UNIVERSITY of HOUSTON</h1>
+        <h2>GRADUATE and PROFESSIONAL STUDENT PETITION</h2>
+      </div>
+
+      <form id="petitionForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Necessary info-->
+        <input type="hidden" name="email" value="{{user.email}}" hidden>
+
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <h3>Student Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name">First Name</label>
+              <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                value="{{ user.first_name }}"
+                readonly
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="middle_name">Middle Name</label>
+              <input
+                type="text"
+                id="middle_name"
+                name="middle_name"
+                value="{{ user.middle_name }}"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name</label>
+              <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                value="{{ user.last_name }}"
+                readonly
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="uh_id">UH ID</label>
+              <input type="text" id="uh_id" name="uh_id" {% if record.uh_id %} value="{{ record.uh_id }}" {% endif %} required />
+            </div>
+            <div class="form-group">
+              <label for="contact_phone">Contact Phone</label>
+              <input type="tel" id="contact_phone" name="contact_phone" {% if record.contact_phone %} value="{{ record.contact_phone }}" {% endif %} required />
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Information -->
+        <div class="form-section">
+          <h3>Current Student Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="program">Program</label>
+              <select id="program" name="program">
+                <option value="" selected>Select...</option>
+                <option value="ARCH" {% if record.program == "ARCH" %} selected {% endif %}>ARCH</option>
+                <option value="ARTS"{% if record.program == "ARTS" %} selected {% endif %}>ARTS</option>
+                <option value="BUSI"{% if record.program == "BUSI" %} selected {% endif %}>BUSI</option>
+                <option value="EDUC"{% if record.program == "EDUC" %} selected {% endif %}>EDUC</option>
+                <option value="ENGR"{% if record.program == "ENGR" %} selected {% endif %}>ENGR</option>
+                <option value="HPA"{% if record.program == "HPA" %} selected {% endif %}>HPA</option>
+                <option value="HRM"{% if record.program == "HRM" %} selected {% endif %}>HRM</option>
+                <option value="LAW"{% if record.program == "LAW" %} selected {% endif %}>LAW</option>
+                <option value="LASS"{% if record.program == "LASS" %} selected {% endif %}>LASS</option>
+                <option value="NSM"{% if record.program == "NSM" %} selected {% endif %}>NSM</option>
+                <option value="NURS"{% if record.program == "NURS" %} selected {% endif %}>NURS</option>
+                <option value="OPTO"{% if record.program == "OPTO" %} selected {% endif %}>OPTO</option>
+                <option value="PHAR"{% if record.program == "PHAR" %} selected {% endif %}>PHAR</option>
+                <option value="SOCW"{% if record.program == "SOCW" %} selected {% endif %}>SOCW</option>
+                <option value="TECH"{% if record.program == "TECH" %} selected {% endif %}>TECH</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="career">Career</label>
+              <select id="career" name="career" required>
+                <option value="" selected>Select...</option>
+                <option value="Graduate"{% if record.career == "Graduate" %} selected {% endif %}>Graduate</option>
+                <option value="Law"{% if record.career == "Law" %} selected {% endif %}>Law</option>
+                <option value="Optometry"{% if record.career == "Optometry" %} selected {% endif %}>Optometry</option>
+                <option value="Pharmacy"{% if record.career == "Pharmacy" %} selected {% endif %}>Pharmacy</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Petition Effective</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="effective_term">Effective Term</label>
+              <select id="effective_term" name="effective_term" required>
+                <option value="">Select...</option>
+                <option {% if record.effective_term == "Spring" %} selected {% endif %}>Spring</option>
+                <option {% if record.effective_term == "Fall" %} selected {% endif %}>Fall</option>
+                <option {% if record.effective_term == "Summer" %} selected {% endif %}>Summer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="year">Year</label>
+              <input type="number" id="year" name="year" min="2023" max="2030" {% if record.year %} value="{{ record.year }}" {% endif %} required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Purpose Section -->
+        <div class="form-section">
+          <h3>Purpose of Petition</h3>
+
+          <!-- Petition Options -->
+          <div class="petition-options">
+            <div class="petition-item">
+              <label for="update_program"
+                >1. Update programs status/action (term activate, discontinue,
+                etc)</label
+              >
+              <input type="checkbox" id="update_program" name="update_program" {% if record.update_program %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="admissions_status"
+                >2. Admissions status change (ex: conditional to
+                unconditional)</label
+              >
+              <input type="checkbox" id="admissions_status" name="admissions_status" {% if record.admissions_status %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="add_new_concurrent"
+                >3. Add new concurrent degree or certificate objective
+                (career/program/plan)</label
+              >
+              <input type="checkbox" id="add_new_concurrent" name="add_new_concurrent" {% if record.add_new_concurrent %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="change_degree_objective"
+                >4. Change current degree objective (program/plan)</label
+              >
+              <input type="checkbox" id="change_degree_objective" name="change_degree_objective" {% if record.change_degree_objective %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="degree_requirement_exception"
+                >5. Degree requirement exception or approved course
+                substitution</label
+              >
+              <input type="checkbox" id="degree_requirement_exception" name="degree_requirement_exception" {% if record.degree_requirement_exception %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="leave_of_absence"
+                >6. Leave of Absence (include specific term)</label
+              >
+              <input type="checkbox" id="leave_of_absence" name="leave_of_absence" {% if record.leave_of_absence %} checked {% endif %} />
+              <div class="sub-item">
+                <input type="text" id="leave_documentation" name="leave_documentation" {% if record.leave_documentation %} value="{{ record.leave_documentation }}" {% endif %} />
+              </div>
+            </div>
+
+            <div class="petition-item">
+              <label for="reinstatement"
+                >7. Reinstatement to discontinued Career (provide
+                explanation)</label
+              >
+              <input type="checkbox" id="reinstatement" name="reinstatement" {% if record.reinstatement %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="late_filing_graduation"
+                >8. Request to apply to graduate after the late filing period
+                deadline</label
+              >
+              <input type="checkbox" id="late_filing_graduation" name="late_filing_graduation" {% if record.late_filing_graduation %} checked {% endif %} />
+            </div>
+
+            <!-- Transfer Credit Section -->
+            <div class="petition-item">
+              <label for="transfer_credit">9. Transfer Credit</label>
+              <input type="checkbox" id="transfer_credit" name="transfer_credit" {% if record.transfer_credit %} checked {% endif %} />
+              <div class="transfer-credit-grid">
+                <div class="grid-header">
+                  <label for="institution_name"
+                    >Institution Name [One institution per petition]</label
+                  >
+                  <label for="city_state_zip">City/State/Zip</label>
+                </div>
+
+                <div class="grid-row">
+                  <input type="text" id="institution_name" name="institution_name" {% if record.institution_name %} value="{{ record.institution_name }}" {% endif %} />
+                  <input type="text" id="city_state_zip" name="city_state_zip" {% if record.city_state_zip %} value="{{ record.city_state_zip }}" {% endif %} />
+                </div>
+
+                <div class="credit-section">
+                  <div class="credit-column">
+                    <label for="hours_transferred"
+                      >Hours Previously Transferred:</label
+                    >
+                    <input type="number" id="hours_transferred" name="hours_transferred" {% if record.hours_transferred %} value="{{ record.hours_transferred }}" {% endif %} />
+                  </div>
+                  <div class="credit-column">
+                    <label for="transfer_credits"
+                      >Transfer Credits on this request:</label
+                    >
+                    <input type="number" id="transfer_credits" name="transfer_credits" {% if record.transfer_credits %} value="{{ record.transfer_credits }}" {% endif %} />
+                  </div>
+                </div>
+
+                <div class="course-grid">
+                  <div class="grid-header">
+                    <label for="catalog_number">Catalog #</label>
+                    <label for="semester_taken">Sem/Qtr Taken</label>
+                  </div>
+                  <div class="grid-row">
+                    <input type="text" id="catalog_number" name="catalog_number" {% if record.catalog_number %} value="{{ record.catalog_number }}" {% endif %} />
+                    <input type="text" id="semester_taken" name="semester_taken" {% if record.semester_taken %} value="{{ record.semester_taken }}" {% endif %} />
+                  </div>
+                  <button type="button" class="add-course">+ Add Course</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="petition-item">
+              <label for="change_admit_term">10. Change Admit Term</label>
+              <input type="checkbox" id="change_admit_term" name="change_admit_term" {% if record.change_admit_term %} checked {% endif %} />
+            </div>
+
+            <!-- Early Submission Section -->
+            <div class="petition-item">
+              <label for="early_submission"
+                >11. Early Submission of Thesis/Dissertation</label
+              >
+              <input type="checkbox" id="early_submission" name="early_submission" {% if record.early_submission %} checked {% endif %} />
+            </div>
+
+            <div class="petition-item">
+              <label for="other">12. Other (explain below)</label>
+              <input type="checkbox" id="other" name="other" value={% if record.other %} checked {% endif %} />
+              <textarea id="other_explanation" name="other_explanation">{% if record.other_explanation %}{{ record.other_explanation }}{% endif %}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="form-section">
+          <h3>Explanation of Request</h3>
+          <textarea id="explanation" name="explanation" required>{% if record.explanation %}{{ record.explanation }}{% endif %}</textarea>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="form-section signature-section">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="signature">Student Signature</label>
+              <input
+                type="file"
+                id="signature"
+                name="signature"
+                accept="image/*"
+                {% if record.explanation %} value={{ record.explanation }}{% endif %}
+              />
+              <canvas id="signatureCanvas" width="300" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <button id="fill-out" type="button">
+          Fill Out Form For Me - For testing purposes
+        </button>
+        <button type="submit" onclick="submitForm('/approvalmerge/submitGradPetition/')">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

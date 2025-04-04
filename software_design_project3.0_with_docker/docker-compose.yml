@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file: .env # Load environment variables from the .env file
+    environment:
+      POSTGRES_PASSWORD: "1234" # PostgreSQL password from .env file
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persistent data
+    ports:
+      - "5430:5432" # PostgreSQL port mapping
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5002:5002"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command:
+      - sh
+      - -c
+      - |
+        echo 'Waiting for PostgreSQL...';
+        while ! pg_isready -h db -p 5432 --quiet; do
+          sleep 1;
+        done;
+        echo 'PostgreSQL is ready!';
+        python app.py
+
+volumes:
+  db_data:

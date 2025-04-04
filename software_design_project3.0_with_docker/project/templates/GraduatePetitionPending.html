@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Graduate Student Petition{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/PublicInformationPending.css' %}">
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="header">
+            <h1>Welcome back, {{ name }}</h1>
+        </div>
+        <p>Pending Graduate Student Petition Requests:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Form ID</th>
+                    <th>Email</th>
+                    <th>Form Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in forms %}
+                <tr>
+                    <td>{{ form.formId }}</td>
+                    <td>{{ form.email }}</td>
+                    <td>{{ form.formName }}</td>
+                    <td>{{ form.status }}</td>
+                    <td>
+                        <a href="/newViewPending/?form=GraduatePetition&email={{form.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

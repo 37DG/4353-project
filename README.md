@@ -2,7 +2,10 @@
 
 -----------------------------------------
 In order to run it on docker
-1. Download everything under project v0.2/project v0.2 with docker. (software design project 2.0 is for local purpose)
-2. Run "docker-compose build" on terminal in direct root. (it will take a while, since I used latex-full)
-3. Run "docker-compose up" on terminal in direct root.
-4. Go to boswer to url: "http://localhost:8000"
+Docker Compose setup
+1. In a terminal, navigate to BASE_DIR/project v0.2/project v0.2 with docker/
+2. Create a .env file based on .env.example. Ensure all variables are filled.
+3. Type 'docker compose up' in the terminal
+4. The website should be accessible from URI:8000
+
+NOTE: If any changes are made involving the database (like MYSQL_ROOT_PASSWORD), use 'docker compose down --volumes' then 'docker compose up'.

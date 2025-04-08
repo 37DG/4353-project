@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: transparent;
+    overflow: hidden;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+/* Background container for floating text */
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Floating text animation */
+.floating-text {
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    font-size: 36px;
+    color: rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    animation: flowText 10s linear infinite;
+}
+
+@keyframes flowText {
+    from {
+        left: -100px;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+/* Login Box */
+.login-container {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Microsoft Login Button */
+.login-button {
+    width: 85%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #0078D4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.login-button:hover {
+    background: #005a9e;
+}

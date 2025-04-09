@@ -38,5 +38,5 @@ docker-compose up
 ### Step 3: Access the website
 
 ```
-http://localhost:8000/
+http://localhost:5002/
 ```

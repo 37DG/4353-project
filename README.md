@@ -19,7 +19,7 @@ Docker Compose setup
 
 NOTE: If any changes are made involving the database (like MYSQL_ROOT_PASSWORD), use 'docker compose down --volumes' then 'docker compose up'.
 
-
+----------------------------------------
 
 Instruction for project v0.3.
 

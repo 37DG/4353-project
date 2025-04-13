@@ -5,7 +5,7 @@ project v0.2: This is the folder contains necessary assets for implementation of
 
 project v0.3: This is the folder contains our codes and Vernon's(closest city to Nelson) code for implementation of project v0.3 if you want to run on Docker.
 
-software design project2.0: Self use only. Unless you want to run it on local.
+software design project2.0: Self use only.
 
 -----------------------------------------
 Instruction for project v0.2.

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}View Historical Approval{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/Administrator.css' %}">
+    <style>
+        /* View Detail Button */
+        .btn-view {
+            display: inline-block;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .btn-view:hover {
+            background: linear-gradient(135deg, #0056b3, #003c80);
+            box-shadow: 0 4px 8px rgba(0, 91, 187, 0.5);
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="header">
+        <h1>Welcome back, {{ name }}</h1>
+        <p><strong>{{ records_length }}</strong> Historical approval request{% if records_length != 1 %}s{% endif %}.</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Historical Approval ID</th>
+                <th>File Name</th>
+                <th>Location</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.approval_id }}</td>
+                <td>{{ record.path }}</td>
+                <td>{{ record.locatedFolder }}</td>
+                <td>
+                    <a href="/view_historical_approval/?filename={{ record.path|urlencode }}&locatedFolder={{record.locatedFolder}}" 
+                       class="btn btn-view">
+                        View Detail
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

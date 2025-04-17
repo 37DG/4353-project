@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}REQUEST TO WITHHOLD OR RELEASE PUBLIC INFORMATION{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/ViewPending.css' %}">
+{% endblock %}
+
+{% block name %}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+<div class="pdf-container">
+    <iframe src={{path}}></iframe>
+</div>
+
+<!-- Buttons for Returning, Approving, and Going Back -->
+<div class="button-container">
+    <a href="/historical_approval/" class="btn-action btn-back">Go Back</a>
+</div>
+{% endblock %}

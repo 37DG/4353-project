@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/Administrator.css' %}">
+    <script src="{% static 'js/Administrator.js' %}"></script>
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="header">
+            <h1>Welcome back, {{ name }}</h1>
+            <button class="btn-manage" onclick="openModal('workflowModal')">Workflow Management</button>
+            <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        </div>
+        <p>Role level is: Administrator</p>
+        <p>Access ability level: 
+            {% if level1 == '1' %}
+                <span>Level 1 | </span>
+            {% endif %}
+            {% if level2 == '1' %}
+                <span>Level 2</span>
+            {% endif %}
+        </p>
+        <div class="workflow-section">
+            <h2>Current Workflow Levels</h2>
+            <table class="workflow-table">
+                <thead>
+                    <tr>
+                        <th>Form Name</th>
+                        <th>Approval Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for workflow in workflows %}
+                    <tr>
+                        <td>{{ workflow.form_name|title }}</td>
+                        <td>
+                            {% if workflow.Level == '0' %}
+                                <span style="color: green;">No Approval Needed</span>
+                            {% elif workflow.Level == '1' %}
+                                <span style="color: orange;">Level 1 Only</span>
+                            {% elif workflow.Level == '2' %}
+                                <span style="color: red;">Level 1 & Level 2</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Cougar ID</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Department Level</th>
+                    <th>Staff Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.cougarID }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.status }}</td>
+                    <td>{{ user.level1 }}</td>
+                    <td>{{ user.level2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if users.has_previous %}
+                <button onclick="window.location.href='?page={{ users.previous_page_number }}'">Previous</button>
+            {% endif %}
+            <span>Page {{ users.number }} of {{ users.paginator.num_pages }}</span>
+            {% if users.has_next %}
+                <button onclick="window.location.href='?page={{ users.next_page_number }}'">Next</button>
+            {% endif %}
+        </div>
+
+        <div class="action-buttons">
+            <button onclick="openModal('createModal')">Create User</button>
+            <button onclick="openModal('updateModal')">Update User</button>
+            <button onclick="openModal('deleteModal')">Delete User</button>
+        </div>
+    </div>
+
+    <div class="pending-buttons">
+        <a href="/PublicInformationPending/" class="btn">Release Public Information</a>
+        <a href="/EarlyWithdrawalPending/" class="btn">Early Withdrawal</a>
+        <a href="/GraduatePetitionPending/" class="btn">Graduate Student Petition</a>
+        <a href="/UndergraduateTransferPending/" class="btn">Undergraduate Transfer</a>
+    </div>
+
+    <div class="pending-buttons">
+        <a href="/historical_approval/" class="btn">View Historical Approval</a>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <h3>Create User</h3>
+            <input type="text" id="createName" placeholder="Name">
+            <input type="email" id="createEmail" placeholder="Email">
+            <select id="createRole">
+                <option value="" disabled selected>-- Select Role --</option>
+                <option value="Administrator">Administrator</option>
+                <option value="Basicuser">Basicuser</option>
+            </select>
+            <select id="createStatus">
+                <option value="" disabled selected>-- Select Status --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <select id="createLevel1">
+                <option value="" disabled selected>-- Select Status for Level 1 --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <select id="createLevel2">
+                <option value="" disabled selected>-- Select Status for Level 2 --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <button onclick="createUser()">Submit</button>
+            <button onclick="closeModal('createModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <h3>Update User</h3>
+            <input type="email" id="updateEmail" placeholder="Enter User Email">
+            <input type="text" id="updateName" placeholder="New Name (Optional)">
+            <select id="updateRole">
+                <option value="" disabled selected>-- Select Role (Optional) --</option>
+                <option value="Administrator">Administrator</option>
+                <option value="Basicuser">Basicuser</option>
+            </select>
+            <select id="updateStatus">
+                <option value="" disabled selected>-- Select Status (Optional) --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <select id="updateLevel1">
+                <option value="" disabled selected>-- Select Status for Level 1 (Optional) --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <select id="updateLevel2">
+                <option value="" disabled selected>-- Select Status for Level 2 (Optional) --</option>
+                <option value="1">1</option>
+                <option value="0">0</option>
+            </select>
+            <button onclick="updateUser()">Submit</button>
+            <button onclick="closeModal('updateModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete User</h3>
+            <input type="text" id="deleteName" placeholder="Name">
+            <input type="email" id="deleteEmail" placeholder="Email">
+            <button onclick="deleteUser()">Delete</button>
+            <button onclick="closeModal('deleteModal')">Cancel</button>
+        </div>
+    </div>
+
+
+    <!-- Workflow Management Modal -->
+    <div id="workflowModal" class="modal">
+        <div class="modal-content">
+            <h3>Workflow Management</h3>
+            <form id="workflowForm" method="POST" action="/workflow/">
+                {% csrf_token %}
+                <label>Public Information:</label>
+                <select name="Public_info">
+                    <option value="" disabled selected>-- Select Level --</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <br><br>
+
+                <label>Early Withdrawal:</label>
+                <select name="Early_withdrawal">
+                    <option value="" disabled selected>-- Select Level --</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <br><br>
+
+                <label>Graduate Student Petition:</label>
+                <select name="graduate student petition form">
+                    <option value="" disabled selected>-- Select Level --</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <br><br>
+
+                <label>Undergraduate Transfer:</label>
+                <select name="undergraduate transfer form">
+                    <option value="" disabled selected>-- Select Level --</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <br><br>
+
+                <button type="submit" class="btn">Submit</button>
+                <button type="button" class="btn" onclick="closeModal('workflowModal')">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

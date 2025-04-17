@@ -1,0 +1,244 @@
+/* General Page Styling */
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: "Be Vietnam Pro", sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    text-align: center;
+    color: white;
+}
+
+/* Container Styling */
+.container {
+    background: rgba(30, 30, 30, 0.95);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    max-width: 900px;
+    margin: 80px auto 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(20, 20, 20, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+/* Logout Button */
+.logout-btn {
+    padding: 10px 15px;
+    border: none;
+    background: #ff4b2b;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #ff6b6b, #ff416c);
+    box-shadow: 0 0 10px rgba(255, 75, 43, 0.5);
+    transform: scale(1.05);
+}
+
+.logout-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 6px rgba(255, 75, 43, 0.5);
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #1e1e1e;
+    color: white;
+    border-radius: 8px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 6px;
+    text-align: center;
+}
+
+th {
+    background-color: #2d2d2d;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+    background-color: #252525;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease-in-out;
+}
+
+/* View Detail Button */
+.btn-view {
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+
+.btn-view:hover {
+    background: linear-gradient(135deg, #0056b3, #003c80);
+    box-shadow: 0 4px 8px rgba(0, 91, 187, 0.5);
+    transform: scale(1.05);
+}
+
+/* Pagination Styling */
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 15px;
+    border: none;
+    background: #555;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+    background: linear-gradient(135deg, #41b9ff, #2ba0ff);
+    box-shadow: 0 0 12px rgba(43, 206, 255, 0.6);
+    transform: scale(1.1);
+}
+
+.pagination button:disabled {
+    background: #777;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    .btn-view {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}
+
+
+
+
+
+
+
+/* Delegate Button (similar to btn-view but orange) */
+.btn-delegate {
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #ff7f50, #ff4b2b);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delegate:hover {
+    background: linear-gradient(135deg, #ff4b2b, #ff0000);
+    box-shadow: 0 4px 8px rgba(255, 75, 43, 0.5);
+    transform: scale(1.05);
+}
+/* Modal Styling */
+.modal {
+    position: fixed;
+    z-index: 999;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 32, 39, 0.85); /* dark backdrop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Inner Box */
+.modal-content {
+    background: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+    color: white;
+    text-align: left;
+}
+
+/* Modal Form Input */
+.modal-content input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* Modal Buttons */
+.modal-content .btn {
+    padding: 10px 16px;
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.modal-content .btn-submit {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+}
+
+.modal-content .btn-submit:hover {
+    background: linear-gradient(135deg, #218838, #1c7c31);
+    transform: scale(1.05);
+}
+
+.modal-content .btn-cancel {
+    background: #999;
+    color: white;
+}
+
+.modal-content .btn-cancel:hover {
+    background: #777;
+    transform: scale(1.05);
+}

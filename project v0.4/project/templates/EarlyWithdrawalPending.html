@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Early Withdrawal Requests{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/EarlyWithdrawalPending.css' %}">
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="header">
+            <h1>Welcome back, {{ name }}</h1>
+            <p><strong>{{ records_length }}</strong> Early withdrawal request{% if records_length != 1 %}s{% endif %} are pending release.</p>
+        </div>
+        <p>Pending Release Early Withdrawal Requests:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Department Level</th>
+                    <th>Staff Level</th>
+                    <th>Action</th>
+                    <th>Delegate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.ID }}</td>
+                    <td>{{ record.date|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ record.status }}</td>
+                    <td>{{ record.level1 }}</td>
+                    <td>{{ record.level2 }}</td>
+                    <td>
+                        <a href="/ViewPending/?name={{ record.name|urlencode }}&form=EarlyWithdrawal&date={{ record.date|date:'Y-m-d_H_i_s'|urlencode }}&email={{record.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-delegate" onclick="openDelegateModal('{{ record.email }}')">
+                            Delegate
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if records.has_previous %}
+                <button onclick="window.location.href='?page={{ records.previous_page_number }}'">Previous</button>
+            {% endif %}
+            <span>Page {{ records.number }} of {{ records.paginator.num_pages }}</span>
+            {% if records.has_next %}
+                <button onclick="window.location.href='?page={{ records.next_page_number }}'">Next</button>
+            {% endif %}
+        </div>
+
+
+        <!-- Delegate table -->
+        <p>Delegated Pending Release Early Withdrawal Requests:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Department Level</th>
+                    <th>Staff Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for del_record in delegated_records %}
+                <tr>
+                    <td>{{ del_record.name }}</td>
+                    <td>{{ del_record.email }}</td>
+                    <td>{{ del_record.ID }}</td>
+                    <td>{{ del_record.date|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ del_record.status }}</td>
+                    <td>{{ del_record.level1 }}</td>
+                    <td>{{ del_record.level2 }}</td>
+                    <td>
+                        <a href="/ViewPending/?name={{ del_record.name|urlencode }}&form=EarlyWithdrawal&date={{ del_record.date|date:'Y-m-d_H_i_s'|urlencode }}&email={{del_record.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Delegate Modal -->
+    <div id="delegateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Delegate Request</h3>
+            <form id="delegateForm" method="POST" action="/delegate/">
+                {% csrf_token %}
+                <input type="hidden" name="delegateUserEmail" id="delegateUserEmail">
+                <input type="hidden" name="delegateFormName" id="delegateFormName">
+                <input type="email" name="delegateTo" placeholder="Enter delegate's email" required>
+                <div style="margin-top: 10px;">
+                    <button type="submit" class="btn">Submit</button>
+                    <button type="button" class="btn" onclick="closeDelegateModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openDelegateModal(delegateUserEmail) {
+            document.getElementById("delegateUserEmail").value = delegateUserEmail;
+            document.getElementById("delegateFormName").value = "Early_withdrawal";
+            document.getElementById("delegateModal").style.display = "flex";
+        }
+        
+        function closeDelegateModal() {
+            const modal = document.getElementById("delegateModal");
+            modal.style.display = "none";
+
+            // Clear all inputs inside the modal
+            const inputs = modal.querySelectorAll("input, select, textarea");
+            inputs.forEach(input => input.value = "");
+        }
+
+    </script>
+{% endblock %}

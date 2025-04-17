@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Undergraduate Transfer Pending{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/PublicInformationPending.css' %}">
+{% endblock %}
+
+{% block name%}
+{{ name }}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="header">
+            <h1>Welcome back, {{ name }}</h1>
+            <p><strong>{{ records_length }}</strong> Undergraduate transfer request{% if records_length != 1 %}s{% endif %} are pending release.</p>
+        </div>
+        <p>Pending Undergraduate Transfer Requests:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Form ID</th>
+                    <th>Email</th>
+                    <th>Form Name</th>
+                    <th>Status</th>
+                    <th>Department Level</th>
+                    <th>Staff Level</th>
+                    <th>Action</th>
+                    <th>Delegate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in forms %}
+                <tr>
+                    <td>{{ form.formId }}</td>
+                    <td>{{ form.email }}</td>
+                    <td>{{ form.formName }}</td>
+                    <td>{{ form.status }}</td>
+                    <td>{{ form.level1 }}</td>
+                    <td>{{ form.level2 }}</td>
+                    <td>
+                        <a href="/newViewPending/?form=UndergraduateTransfer&email={{form.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                    <td>
+                        <button class="btn btn-delegate" onclick="openDelegateModal('{{ form.email }}')">
+                            Delegate
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+        <!-- Delegate table -->
+        <p>Delegated Pending Undergraduate Transfer Requests:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Form ID</th>
+                    <th>Email</th>
+                    <th>Form Name</th>
+                    <th>Status</th>
+                    <th>Department Level</th>
+                    <th>Staff Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for del_record in delegated_records %}
+                <tr>
+                    <td>{{ del_record.formId }}</td>
+                    <td>{{ del_record.email }}</td>
+                    <td>{{ del_record.formName }}</td>
+                    <td>{{ del_record.status }}</td>
+                    <td>{{ del_record.level1 }}</td>
+                    <td>{{ del_record.level2 }}</td>
+                    <td>
+                        <a href="/newViewPending/?form=UndergraduateTransfer&email={{del_record.email }}" 
+                           class="btn btn-view">
+                            View Detail
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Delegate Modal -->
+    <div id="delegateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Delegate Request</h3>
+            <form id="delegateForm" method="POST" action="/delegate/">
+                {% csrf_token %}
+                <input type="hidden" name="delegateUserEmail" id="delegateUserEmail">
+                <input type="hidden" name="delegateFormName" id="delegateFormName">
+                <input type="email" name="delegateTo" placeholder="Enter delegate's email" required>
+                <div style="margin-top: 10px;">
+                    <button type="submit" class="btn">Submit</button>
+                    <button type="button" class="btn" onclick="closeDelegateModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openDelegateModal(delegateUserEmail) {
+            document.getElementById("delegateUserEmail").value = delegateUserEmail;
+            document.getElementById("delegateFormName").value = "undergraduate transfer form";
+            document.getElementById("delegateModal").style.display = "flex";
+        }
+        
+        function closeDelegateModal() {
+            const modal = document.getElementById("delegateModal");
+            modal.style.display = "none";
+
+            // Clear all inputs inside the modal
+            const inputs = modal.querySelectorAll("input, select, textarea");
+            inputs.forEach(input => input.value = "");
+        }
+
+    </script>
+{% endblock %}

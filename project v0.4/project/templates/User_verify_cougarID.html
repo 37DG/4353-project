@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter Cougar ID</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 300px;
+        }
+
+        .input-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .input-box button {
+            width: 100%;
+            padding: 10px;
+            background: #0073e6;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .input-box button:hover {
+            background: #005bb5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="input-box">
+    <h2>Enter Cougar ID</h2>
+    <form method="POST" action="/approvalsystem/UserverifyCougarID/">
+        <!-- Include CSRF token if using Django -->
+        {% csrf_token %}
+        <input type="number" name="cougarID" placeholder="Cougar ID" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

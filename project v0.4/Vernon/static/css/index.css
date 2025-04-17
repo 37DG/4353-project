@@ -1,0 +1,109 @@
+/* General Styles */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation Bar */
+nav {
+  background-color: #cb142c;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn {
+  background-color: white;
+  color: #160204 !important;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  margin: 20px;
+}
+
+.form-list {
+  width: 30%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.form-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.form-list a {
+  text-decoration: none;
+  color: #cb142c;
+  font-weight: bold;
+}
+
+.form-details {
+  flex-grow: 1;
+  background-color: white;
+  margin-left: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.login {
+  width: 300px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.logo {
+  margin-right: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+#graduate-petition-form,
+#undergraduate-transfer-form {
+  cursor: pointer;
+}
+
+#graduate-petition-form:hover,
+#undergraduate-transfer-form:hover,
+.view-submitted-form-btn:hover {
+  color: red;
+}
+
+.view-submitted-form-btn {
+  cursor: pointer;
+}

@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    env_file: ./project/.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  django_web:
+    build: ./project
+    volumes:
+      - ./project:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    env_file:
+      - ./project/.env
+    command:
+      - sh
+      - -c
+      - |
+        echo 'Waiting for MySQL...';
+        while ! mysqladmin ping -h mysql -P 3306 --silent; do sleep 1; done;
+        echo 'MySQL is ready!';
+        python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:8000
+
+  postgres:
+    image: postgres:15
+    env_file: ./Vernon/.env
+    environment:
+      POSTGRES_DB: vernon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5430:5432"
+
+  flask_web:
+    build: ./Vernon
+    volumes:
+      - ./Vernon:/app
+    ports:
+      - "5002:5002"
+    depends_on:
+      - postgres
+    env_file:
+      - ./Vernon/.env
+    command:
+      - sh
+      - -c
+      - |
+        echo 'Waiting for PostgreSQL...';
+        while ! pg_isready -h postgres -p 5432 --quiet; do sleep 1; done;
+        echo 'PostgreSQL is ready!';
+        python app.py
+
+volumes:
+  mysql_data:
+  postgres_data:

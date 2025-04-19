@@ -1,6 +1,7 @@
 # Team Nelson
 -----------------------------------------
-<iframe width="560" height="315" src="https://www.youtube.com/embed/yQ2K8-CZ75A?si=jSGBDy0esRrfXDBb&amp;start=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Here is the demo for our project
+[Watch the video](https://www.youtube.com/watch?v=yQ2K8-CZ75A&t=1s)
 -----------------------------------------
 # Folder Purpose
 project v0.2: This is the folder contains necessary assets for implementation of project v0.2 if you want to run on Docker.
